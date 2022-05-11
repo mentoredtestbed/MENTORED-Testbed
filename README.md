@@ -29,3 +29,5 @@ The specific goals are:
 * **Objective 2:** The risk analysis by the identification of botnets formed by IoT devices and the prediction of known and unknown (zero-day) DDoS attacks;
 * **Objective 3:** The identification and classification of malicious behavior related to DDoS attacks and the proposition of a solution to detect and mitigate those attacks;
 * **Objective 4:** The design and implementation of an experimentation environment (testbed), with access control, in which the solutions proposed in this project can be tested.
+
+[MENTORED](https://www.mentoredproject.org/)
