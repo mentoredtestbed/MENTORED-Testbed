@@ -25,7 +25,7 @@ The MENTORED project main goal consists of advancing scientific knowledge, human
 
 The specific goals are:
 
-* Objective 1: The design of a monitoring solution of IoT flows to prevent attacks and help the modeling, detection, and prediction of botnets and DDoS attacks;
-* Objective 2: The risk analysis by the identification of botnets formed by IoT devices and the prediction of known and unknown (zero-day) DDoS attacks;
-* Objective 3: The identification and classification of malicious behavior related to DDoS attacks and the proposition of a solution to detect and mitigate those attacks;
-* Objective 4: The design and implementation of an experimentation environment (testbed), with access control, in which the solutions proposed in this project can be tested.
+* **Objective 1:** The design of a monitoring solution of IoT flows to prevent attacks and help the modeling, detection, and prediction of botnets and DDoS attacks;
+* **Objective 2:** The risk analysis by the identification of botnets formed by IoT devices and the prediction of known and unknown (zero-day) DDoS attacks;
+* **Objective 3:** The identification and classification of malicious behavior related to DDoS attacks and the proposition of a solution to detect and mitigate those attacks;
+* **Objective 4:** The design and implementation of an experimentation environment (testbed), with access control, in which the solutions proposed in this project can be tested.
