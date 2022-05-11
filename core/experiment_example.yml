@@ -1,0 +1,122 @@
+"
+STR name (Obrigatório):
+  Nome que o usuário vai usar para identificar o experimento
+
+timeout_warmup (Opcional):
+  Default = 10
+  Tempo máximo para execução do warmup em minutos. Usuário pode especificar
+  um tempo menor ou igual ao default. O sistema encerra o experimento se o
+  warmup demorar mais que o timeout.
+  
+
+INT timeout_experiment (Opcional):
+  Default = 60
+  Tempo máximo para execução do experimento em minutos.
+  Usuário pode especificar um tempo menor ou igual ao default. O sistema encerra
+  o experimento se o experimento demorar mais que o timeout.
+
+LIST containers_set (Opcional):
+  Default = empty
+  Lista de novos containers que serão usados para criar os device softwares.
+  Se não for especificado, o usuário assume que já criou anteriormente.
+
+LIST nodeactors (Obrigatório):
+  Nós da topologia. Usuário deve inserir ao menos um nó.
+
+  STR nodeactors[x].name (Obrigatório):
+    Nome que identifica o nodeactor
+
+  INT nodeactors[x].instances (Obrigatório):
+    Número de vezes que o NodeActor será instanciado. As instâncias são
+    independentes de si e visíveis para o usuário. NÃO é equivalente ao conceito
+    de replicas do Kubernetes.
+
+  STR nodeactors[x].container (Obrigatório):
+    Nome que identifica um container pré-existente, ou declarado em
+    containers_set.
+
+  STR nodeactors[x].region (Opcional):
+    Default = 'auto'
+    Nome de um worker no ids. Caso seja 'auto', o serviço irá identificar
+    automaticamente um worker para instanciar os containers.
+
+
+STR | OBJECT topology (Opcional):
+  Default = empty
+
+  Tipo de topologia utilizada. Pode ser String ou um Object.
+
+  Se empty:
+    Não cria nenhuma topologia.
+  
+  Se 'fully_connected':
+    Cria links par a par para cada instância dos Node Actors. Não cria links
+    entre instâncias de um mesmo Node Actor. Para cada link, uma interface de
+    rede é criada nos Pods chamada lX-Y, onde X e Y são os identificadores das
+    instâncias.
+
+
+  Se 'ovs_fully_connected':
+    Cria um OVS (switch virtual) para cada região utilizada. Todos os nós de
+    uma região terão um link com seu OVS na interface de rede chamada
+    'ovs-link'.
+
+  Se for um OBJECT:
+    Representa uma lista de links entre dois Node Actors.
+    A conexão será par a par para cada instância dos dois Node Actors.
+
+    Exemplo:
+    topology:
+      - node1: 'nodeactor-name-1'
+        node2: 'nodeactor-name-2'
+        ifname: 'link-1-2'
+      - node1: 'nodeactor-name-2'
+        node2: 'nodeactor-name-3'
+        ifname: 'link-2-3'
+
+
+
+@: Parâmetro obrigatório
+~(Default): Parâmetro opcional. Usa Default se não especificado
+"
+
+Experiment:
+  name: exemplo_mentored # @
+  timeout_warmup: # ~(10)
+
+  timeout_experiment: # ~(60)
+
+  containers_set: # ~ (empty)
+    # Assume que meu_device_software1 já está no banco de dados
+
+    - name: 'meu_device_software2'
+      image: ghcr.io/brunomeyer/generic-botnet
+      command: ['entry.sh']
+      env:
+        - name: PROTOCOL
+          value: 'ICMP'
+      args: ['hping3', '--rand-source', '-I', 'net1', '--flood', '-p', '80']
+  
+  nodeactors: # @
+    - name: 'nodeactor-name-1' # @
+      replicas: 3 # ~ (1)
+      containers: 'meu_device_software1' # ~ ('default_host')
+      region: 'whx-rs' # ~ ('auto')
+    - name: 'nodeactor-name-2'
+      replicas: 2
+      containers: 'meu_device_software2'
+      region: 'ids-mg'
+    - name: 'nodeactor-name-3'
+      replicas: 1
+      containers: 'meu_device_software3'
+      region: 'ids-pa'
+  
+  # topology: 'topology_name' # @ ['fully_connected', 'ovs_fully_connected']
+
+  topology: # ~ (empty)
+    - node1: 'nodeactor-name-1' # @
+      node2: 'nodeactor-name-2' # @
+      ifname: 'link-1-2' # @
+    - node1: 'nodeactor-name-2'
+      node2: 'nodeactor-name-3'
+      ifname: 'link-2-3'
