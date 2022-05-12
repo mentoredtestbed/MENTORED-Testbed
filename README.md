@@ -3,7 +3,11 @@ Da Modelagem à Experimentação - Predizendo e detectando ataques DDoS e zero-d
 
 # Bem vindo ao MENTORED *testbed*
 
-O projeto MENTORED é um projeto cooperativo entre a Universidade Federal de Minas Gerais (UFMG), a Universidade Federal de Pernambuco (UFPE), a Universidade de São Paulo (USP), o Instituto Federal de Santa Catarina (IFSC), a Universidade do Vale do Itajaí e Rede Nacional de Pesquisa (RNP). Foi selecionado como projeto temático na chamada pública MCTIC/CGI/FAPESP 2018. O projeto tem os seguintes objetivos principais: (i) Identificar, modelar e avaliar comportamentos maliciosos relacionados à IoT; (ii) auxiliar na construção de soluções avançadas e coordenadas para possibilitar: prevenção, previsão, detecção e mitigação de ataques DDoS; e (iii) fornecer à comunidade científica em Cibersegurança um testbed para permitir que pesquisadores experimentem suas soluções em relação a ataques DDoS.
+O projeto MENTORED é um projeto cooperativo entre a Universidade Federal de Minas Gerais (UFMG), a Universidade Federal de Pernambuco (UFPE), a Universidade de São Paulo (USP), o Instituto Federal de Santa Catarina (IFSC), a Universidade do Vale do Itajaí e Rede Nacional de Pesquisa (RNP). Foi selecionado como projeto temático na chamada pública MCTIC/CGI/FAPESP 2018. O projeto tem os seguintes objetivos principais: 
+
+- Identificar, modelar e avaliar comportamentos maliciosos relacionados à IoT; 
+- Auxiliar na construção de soluções avançadas e coordenadas para possibilitar: prevenção, previsão, detecção e mitigação de ataques DDoS; 
+- Fornecer à comunidade científica em Cibersegurança um testbed para permitir que pesquisadores experimentem suas soluções em relação a ataques DDoS.
 
  O WP4 tem como foco prover um ambiente controlado para experimentação (testbed) em cibersegurança, a fim de oferecer recursos para que os pesquisadores dos demais WPs, e mesmo da comunidade de segurança em geral, possam demonstrar a viabilidade de suas soluções para redes seguras e com escala realista. 
 
