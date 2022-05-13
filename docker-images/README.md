@@ -1,1 +1,1 @@
-# Imagens Docker pré configuradas com a ferramentas necessárias para a execução do experimento
+Imagens Docker pré configuradas com as ferramentas necessárias para a execução do experimento
