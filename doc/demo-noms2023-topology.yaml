@@ -1,0 +1,58 @@
+Experiment:
+  name: mentored-testbed-demo
+  nodeactors:
+    - name: 'na-server'
+      replicas: 1
+      containers:
+        - name: tcpdump
+          image: ghcr.io/brunomeyer/nginx-server
+          imagePullPolicy: "Always"
+          env:
+            - name: TIMEOUT_CMD
+              value: "300"
+          command: ["/app/entry.sh"]
+          args: ["python3", "save_throughput.py"]
+          securityContext:
+            privileged: true
+        - name: nginx
+          image: nginx
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 80
+      region: 'whx-es'
+    - name: 'na-botnet'
+      replicas: 2
+      containers:
+        - name: botnet
+          image: ghcr.io/brunomeyer/generic-botnet
+          imagePullPolicy: "Always"
+          env:
+            - name: PROTOCOL
+              value: "ICMP"
+            - name: TIMEOUT_CMD
+              value: "180"
+            - name: TIME_WAIT_START
+              value: "60"
+            - name: NET_INTERFACE
+              value: ovs-link
+          command: ["./entry.sh"]
+          args: ["hping3", "-S", "--faster", "-p", "80"]
+          securityContext:
+            privileged: true
+      region: 'whx-ba'
+    - name: 'na-client'
+      replicas: 3
+      containers:
+        - name: client
+          image: ghcr.io/brunomeyer/generic-client
+          imagePullPolicy: "Always"
+          env:
+            - name: TIMEOUT_CMD
+              value: "300"
+          command: ["./entry.sh"]
+          args: ['python3', 'client_metrics.py']
+          securityContext:
+            privileged: true
+      region: 'whx-sp'
+  topology: 'ovs_fully_connected'
