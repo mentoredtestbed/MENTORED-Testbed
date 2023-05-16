@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <div class="notification">
+	<h1 class="subtitle"><strong>Django User Info</strong></h1>
+    <table class="table">
+	  <thead>
+   	     <tr>
+        	<th><abbr title="Shib-Attribute">Attribute</abbr></th>
+        	<th><abbr title="Value">Value</abbr></th>
+    	     </tr>
+
+	  </thead>
+    	  <tbody>
+                  <tr>
+                    <td>Username:</td>
+                    <td>{{ user.username }}</td>
+                  </tr>
+
+                  <tr>
+                    <td>Email:</td>
+                    <td>{{ user.email }}</td>
+                  </tr>
+
+                  <tr>
+                    <td>First Name:</td>
+                    <td>{{ user.first_name }}</td>
+                  </tr>
+
+                  <tr>
+                    <td>Last Name:</td>
+	            <td>{{ user.last_name }}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+          </div>
+      </div>
+   </div>
+ <div style="text-align: center">
+    <!-- form action="{{ logout_link }}" -->
+    <form action='/saml2/logout'>
+    <button class="button is-warning">
+      LogOut
+    </button>
+    
+</div>
+
+
+{% endblock %}
+

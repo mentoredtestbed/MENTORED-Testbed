@@ -1,0 +1,10 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+{{ HTTP_CN }}
+{{ user }}
+{{ user.email }}
+{% endblock %}
+

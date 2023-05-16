@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+    <meta charset="UTF-8">
+    <title>sp-django</title>
+    <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+<section class="hero is-small head">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title head">
+        SP-Python
+      </h1>
+      <h2 class="subtitle head">
+        Desenvolvido em Django
+      </h2>
+    </div>
+  </div>
+</section>
+
+{% block content %}
+
+{% endblock %}
+{% block clearespace %}
+<br>
+<br>
+<br>
+
+{% endblock %}
+
+<!--<div class="content has-text-centered">
+          <div class="row">
+            <div class="col s12 m4"></div>
+            <div class="col s12 m4">
+              <img class="responsive-img center" src="{% static 'images/logo-cafe.png' %} ">
+            </div>
+          </div>
+</div>
+-->
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      Developed by <a target="_blank" href="https://gidlab.rnp.br">GIdLab</a>.
+    </p>
+  </div>
+</footer>
+</body>
+</html>

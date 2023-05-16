@@ -1,0 +1,59 @@
+.dashboard-rectangle {
+    position: fixed;
+    height: 180%;
+    width: 120%;
+    left: -25%;
+    top: -39%;
+    background: #BCD3E3;
+    transform: rotate(35deg);
+}
+
+.menu-sidebar {
+    background: #F0FAFF;
+}
+
+.button {
+    font-size: 1vw;
+    border: 2px solid #002A48;
+    border-radius: 1.5vw;
+    color: #12293E;
+    background: #667479;
+    text-align: center;
+    color: white;
+}
+
+.button:hover {
+    background: #002A48;
+    color: #F0FAFF;
+}
+
+.home {
+    background-color: #103559;
+}
+
+.projects {
+    background-color: #00A7E7;
+}
+
+.projects-drop {
+    width: fit-content;
+    width: 22vw;
+    background-color: #00A7E7;
+}
+
+.execution {
+    width: fit-content;
+    background-color: #000000;
+    width: 12vw;
+}
+
+.experiments {
+    width: max-content;
+    background-color: #FF564F;
+    width: 12vw;
+}
+
+.project-name {
+    font-size: 1vw;
+    background-color: #00A7E7;
+}

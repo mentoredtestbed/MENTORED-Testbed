@@ -1,0 +1,71 @@
+.Main-card {
+    border-radius: 1vw;
+}
+
+.card-title {
+    font-size: 1.5vw;
+}
+
+.card-subtitle {
+    font-size: 1vw;
+}
+
+.card-text {
+    font-size: 0.8vw;
+}
+
+.Updates-card {
+    left: 3%;
+    background: #003459;
+    color: white;
+}
+
+.Tutorial-card {
+    background: #F7DBA7;
+    color: #00171F;
+}
+
+.Secondary-card {
+    border-radius: 1vw;
+}
+
+.Execution-card-1 {
+    background: #00171F;
+    color: white;
+}
+
+.Execution-card-2 {
+    background: #242B33;
+    color: white;
+    left: 1%;
+}
+
+.Execution-card-3 {
+    left: 2%;
+    background: #667479;
+    color: white;
+}
+
+.Execution-card-4 {
+    left: 3%;
+    background: #99A2A5;
+    color: white;
+
+}
+
+.Experiment-card {
+    background: #FF564F;
+    color: white;
+}
+
+.Experiment-card-2 {
+    left: 1%;
+}
+
+.Experiment-card-3 {
+    left: 2%;
+}
+
+.Experiment-card-4 {
+    left: 3%;
+}

@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Serviço de Homologação de Atributos</h1>
+      <h2 class="subtitle">
+        Federação <strong>CAFe Expresso</strong>
+      </h2>
+        <br class="is-capitalized has-text-justified">
+            A CAFe Expresso é uma federação espelho da CAFe em produção. Nela é possível fazer experimentos usando Shibboleth, simpleSAMLphp, OpenIDConnect e outras soluções para gestão de Identidades.<br>
+            Quem Pode usar?<br>
+            Pesquisadores do Brasil e da América Latina são habilitados a usar os serviços GIdLab.
+        </p>
+    </div>
+  </section>
+<div class="field is-grouped is-grouped-centered">
+  <p class="control">
+    <form action="https://gidlab.rnp.br">
+    <button style="margin-right: 15px" class="button is-info">
+      GIdLab
+    </button>
+    </form>
+    <form action="/saml2/login">
+    <button class="button is-success">
+      Login Institucional
+    </button>
+    </form>
+  </p>
+</div>
+{% endblock %}
