@@ -1,0 +1,102 @@
+.navcolor {
+    background-color: #003459 !important;
+}
+
+.tittle {
+    font-family: 'Open Sans';
+    font-weight: 700;
+    line-height: 1.3;
+    font-size: 1vw;
+    color: #fbf8f8;
+}
+
+.user-data {
+    font-style: normal;
+    font-size: 1vw;
+    color: #FDFDFD;
+
+}
+
+.logout-iconeStyle,
+.settings-iconeStyle,
+.notification-iconeStyle,
+.user-iconeStyle {
+    color: #FDFDFD;
+}
+
+.logout-iconeStyle {
+    height: 4vh;
+    width: auto;
+}
+
+.settings-iconeStyle {
+    height: 3vh;
+    width: auto;
+}
+
+.notification-iconeStyle {
+    height: 7vh;
+    width: auto;
+}
+
+.user-iconeStyle {
+    height: 6vh;
+    width: auto;
+
+}
+
+button:hover {
+    background-color: #45545f;
+}
+
+
+.btn-settings {
+    background-color: #F0FAFF;
+    border-radius: 2vw;
+}
+
+button>a {
+    color: #003459;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1vw;
+}
+
+button {
+    height: 10%;
+    width: 100%;
+}
+
+.dropmsg {
+    width: 60vw;
+}
+
+.msg-container {
+    background-color: #F0FAFF;
+    border-radius: 2vw;
+    padding: 0.5vw;
+    margin: 1vh;
+}
+
+.msgcontent {
+    margin-right: 1vw;
+    white-space: pre-wrap;
+    text-align: justify;
+}
+
+.msg-info {
+    display: flex;
+    justify-content: space-between;
+    color: #003459;
+    font-weight: 700;
+    font-size: 1.5vh;
+}
+
+
+.msgtime {
+    margin-right: 1vw;
+}
+
+.msgsender {
+    margin-right: 1vw;
+}

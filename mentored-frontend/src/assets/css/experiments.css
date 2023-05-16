@@ -1,0 +1,30 @@
+.title {
+    background: #103559;
+    border-radius: 1vw;
+}
+
+.title>h1 {
+    font-weight: 700;
+    font-size: 2vw;
+    color: #FDFDFD;
+}
+
+.newrequest-newdefinition-button {
+    background: #103559;
+    border-radius: 1vw;
+    min-width: max-content;
+}
+
+.button-text {
+    font-size: 1vw;
+    font-weight: 700;
+    color: #FDFDFD;
+}
+
+.newrequest-newdefinition-button:hover {
+    color: #FDFDFD;
+}
+
+.table-size {
+    height: 70vh;
+}

@@ -1,0 +1,38 @@
+.index-subtitle {
+    font-weight: 300;
+    font-style: italic;
+    color: #003459;
+    font-size: 2.3vw;
+}
+
+.enter-button {
+    padding-left: 7vw;
+    padding-right: 7vw;
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh;
+    height: auto;
+    width: 25vw;
+    font-size: 1vw;
+    border: 0.3vh solid #002A48;
+    border-radius: 10vw;
+    color: #12293E;
+    background-color: transparent;
+}
+
+.google-icon {
+    height: auto;
+    width: 1.5vw;
+}
+
+.cafe-icon {
+    height: auto;
+    width: 2vw;
+}
+
+.description-text {
+    font-size: 1.2vw;
+}
+
+.enter-button:hover {
+    background-color: #12293e79;
+}

@@ -1,0 +1,12 @@
+.main-title {
+        color: #003459;
+        font-weight: 800;
+        font-size: 2.5vw;
+}
+
+.rectangle-index {
+        left: -70vw;
+        background: #BCD3E3;
+        border-radius: 9vw;
+        transform: rotate(30deg);
+}

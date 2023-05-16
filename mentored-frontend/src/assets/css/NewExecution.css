@@ -1,0 +1,17 @@
+.background-rectangle-Execution {
+    background: #F0FAFF;
+}
+
+
+.project-selection:hover {
+    background-color: #ffffff79;
+}
+
+.label {
+    color: white;
+    font-size: 1vw;
+}
+
+.action-button {
+    font-size: 1vw;
+}
