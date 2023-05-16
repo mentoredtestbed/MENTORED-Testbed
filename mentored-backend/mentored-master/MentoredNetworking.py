@@ -105,12 +105,12 @@ class MentoredNetworking(MentoredComponent):
   
   def __init__(self, namespace):
     super().__init__(namespace)
-    config.load_kube_config()
+    config.load_kube_config('/root/.kube/config')
     self.kubeapi = client.CoreV1Api()
 
     self.next_networking_id = 0
 
-    configuration = config.load_kube_config()
+    configuration = config.load_kube_config('/root/.kube/config')
 
     with kubernetes.client.ApiClient(configuration) as api_client:
       self.api_instance = kubernetes.client.CustomObjectsApi(api_client)
@@ -162,21 +162,14 @@ class MentoredNetworking(MentoredComponent):
 
     return networking_dict
 
-
-  def create_kube_resources(self, username, raw_device_list, network_type='ovs_fully_connected', wait_for_run=False):
-
+  def create_knetlab_topology(self, username, raw_device_list, network_type='ovs_fully_connected', wait_for_run=False):
     network_types = ['ovs_fully_connected', 'fully_connected', 'test_topology']
     if not (network_type in network_types):
       if type(network_type) != list:
         raise "invalid network_type. Current network_types = {}".format(network_types)
     
-    # TODO: Fix name generator
-    net_name = "mentorednetworking{}-{}-{}".format(self.next_networking_id,
-                             username,
-                             "mentored")
-    
-    self.net_name = net_name
-    
+    net_name = self.net_name
+
     # TODO: Validation of raw_device_list
 
     containers_count = sum(
@@ -351,7 +344,7 @@ class MentoredNetworking(MentoredComponent):
             device_ifname_list[dvc2_name].append(rev_ifname)
             j+=1
 
-    elif network_type is 'test_topology':
+    elif network_type == 'test_topology':
 
       ovs_device_list = [x for x in device_list if x['model'] == 'ovs']
       for i, dvc1 in enumerate(ovs_device_list):
@@ -387,6 +380,9 @@ class MentoredNetworking(MentoredComponent):
       }
     }
 
+    with open(f"{net_name}.yaml", "w") as f:
+      yaml_data = yaml.dump(body)
+      f.write(yaml_data)
 
     networking = self.api_instance.create_namespaced_custom_object(
       group="knetlab.rnp.br",
@@ -398,6 +394,26 @@ class MentoredNetworking(MentoredComponent):
       _request_timeout=999999)
 
     self.next_networking_id+=1
+
+    return device_list, device_ifname_list, link_list, main_container, device_name_to_name_actor, networking
+
+  def create_kube_resources(self, username, raw_device_list, network_type='ovs_fully_connected', wait_for_run=False):
+    
+    
+    
+    # TODO: Fix name generator
+    net_name = "mentorednetworking{}-{}-{}".format(self.next_networking_id,
+                             username,
+                             "mentored")
+    
+    self.net_name = net_name
+    
+    device_list, device_ifname_list, link_list, main_container, device_name_to_name_actor, networking = self.create_knetlab_topology(
+      username, raw_device_list, network_type=network_type, wait_for_run=wait_for_run)
+
+    containers_count = sum(
+      [len(x['containers'])*x['replicas'] for x in raw_device_list]
+    )
 
     device_list_names = set([x['name'] for x in device_list])
     set_active_pods = set()

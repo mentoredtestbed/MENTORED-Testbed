@@ -1,0 +1,19 @@
+.auth{
+    width: 20%;
+    margin-top: 50px;
+    margin-left: 40%;
+    margin-bottom: 50px;
+}
+.head{
+    background-color: #795535;
+    color: white;
+}
+.footer{
+    left: 0;
+    height: 5%;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #795535;
+    color: white;
+}

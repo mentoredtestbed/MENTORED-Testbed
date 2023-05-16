@@ -7,14 +7,16 @@ import warnings
 import json
 import time
 
+import yaml
+
 class MentoredDeviceSoftware(MentoredComponent):
 
   def __init__(self, namespace):
     super().__init__(namespace)
-    config.load_kube_config()
+    config.load_kube_config('/root/.kube/config')
     self.kubeapi = client.CoreV1Api()
 
-    configuration = config.load_kube_config()
+    configuration = config.load_kube_config('/root/.kube/config')
 
     with kubernetes.client.ApiClient(configuration) as api_client:
       self.api_instance = kubernetes.client.CustomObjectsApi(api_client)
@@ -63,6 +65,10 @@ class MentoredDeviceSoftware(MentoredComponent):
         }
       }
     }
+
+    # with open(f"{d_name}.yaml", "w") as f:
+    #   yaml_data = yaml.dump(body)
+    #   f.write(yaml_data)
 
     device = self.api_instance.create_namespaced_custom_object(group="knetlab.rnp.br", version="v1", namespace=self.namespace, plural="devices", body=body, async_req=False, _request_timeout=999999)
 

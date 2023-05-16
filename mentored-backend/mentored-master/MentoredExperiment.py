@@ -79,7 +79,7 @@ class MentoredDataService():
       return None
 
 class MentoredExperiment(MentoredComponent):
-  def __init__(self, namespace, fname=None):
+  def __init__(self, namespace, fname=None, user_name='bruno', exp_id=0):
     super().__init__(namespace)
     
     self.name = None
@@ -93,6 +93,8 @@ class MentoredExperiment(MentoredComponent):
     self.default_timeout_experiment = 60
     self.default_containers_set = []
     self.default_topology = 'fully_connected'
+    self.user_name = user_name
+    self.exp_id = exp_id
     
   def from_yaml(self, fname):
     with open(fname, "r") as stream:
@@ -158,7 +160,9 @@ class MentoredExperiment(MentoredComponent):
 
 
     mn = MentoredNetworking(self.namespace)
-    print(mn.create_kube_resources("bruno", self.nodeactors, wait_for_run=True, network_type=self.topology), end="\n\n")
+    mn.next_networking_id = self.exp_id
+
+    print(mn.create_kube_resources(self.user_name, self.nodeactors, wait_for_run=True, network_type=self.topology), end="\n\n")
 
     # pods = mn.get_kube_resources(return_pods=True,
     #                              net_name=mn.net_name)
@@ -186,21 +190,33 @@ class MentoredExperiment(MentoredComponent):
 
 if __name__ == "__main__":
 
+  # namespace = "mentored-lab"
+  # namespace = "mentored-lab01"
+  # namespace = "mentored-lab02"
+  # namespace = "mentored-lab03"
+  # namespace = "mentored-lab05"
+  # namespace = "mentored-lab06"
+  # namespace = "mentored-lab07"
+  # namespace = "mentored-lab10"
+  # namespace = "infect-4"
+  default_namespace = "sbrc3"
+
   parser = argparse.ArgumentParser(description='Process some integers.')
   parser.add_argument('-f', '--input_file', dest='input_file', required=True)
   parser.add_argument('-c', dest='create', action='store_true')
   parser.add_argument('-l', dest='list', action='store_true')
   parser.add_argument('-d', dest='delete', action='store_true')
+  parser.add_argument('-n', dest='namespace')
+  parser.add_argument('-t', dest='target', default='mentorednetworking0-bruno-mentored')
+
   parser.set_defaults(create=False)
   parser.set_defaults(list=False)
   parser.set_defaults(delete=False)
+  parser.set_defaults(namespace=default_namespace)
 
   args = parser.parse_args()
-
-  # namespace = "mentored-lab"
-  # namespace = "mentored-lab01"
-  # namespace = "mentored-lab02"
-  namespace = "mentored-lab03"
+  namespace = args.namespace
+  target = args.target
 
   me = MentoredExperiment(namespace)
   
@@ -216,4 +232,5 @@ if __name__ == "__main__":
   if args.list:
     print(json.dumps(mn.get_kube_resources(), indent=4, sort_keys=True), end="\n\n")
   if args.delete:
-    me.delete_kube_resources("mentorednetworking0-bruno-mentored", wait_for_create=False)
+    # me.delete_kube_resources("mentorednetworking15-admin-mentored", wait_for_create=False)
+    me.delete_kube_resources(target, wait_for_create=False)
