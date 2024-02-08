@@ -1,0 +1,24 @@
+Schedule:
+  project: mentored
+  author: Bruno Meyer
+
+  Experiment:
+    name: MacvlanExp
+    description: Experimento com restrições de recursos usando Macvlan
+    time: 2.5  # minutes
+    manifests:
+      - kind: pod
+        type: server
+        run: 0 # minute. Delay to start
+        stop: 0 # minutes before experiment ends
+        path: /home/brunomeyer/mentored-master/experimentos/manifestos/server-limit-macvlan.yml
+      - kind: deployment     
+        type: botnet
+        run: 1 # minute. Delay to start
+        stop: 1 # minutes before experiment ends
+        path: /home/brunomeyer/mentored-master/experimentos/manifestos/iot-limit-macvlan.yml
+      - kind: deployment     
+        type: client
+        run: 0.5 # minute. Delay to start
+        stop: 0.5 # minutes before experiment ends
+        path: /home/brunomeyer/mentored-master/experimentos/manifestos/client-limit-macvlan.yml

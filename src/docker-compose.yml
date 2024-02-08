@@ -1,0 +1,61 @@
+version: '3'
+services:
+  frontend-build:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend-build
+    network_mode: "host"
+    command: /app/frontend-build-entrypoint.sh
+    volumes:
+      - ./build-prod:/build
+      - .env:/app/.env
+  tutorial-build:
+    build:
+      context: .
+      dockerfile: Dockerfile.tutorial-build
+    network_mode: "host"
+    command: /app/tutorial-build-entrypoint.sh
+    volumes:
+      - ./build-tutorial-prod:/build-tutorial
+
+  # mentored-backend:
+  #   build:
+  #     context: .
+  #     dockerfile: mentored-backend/Dockerfile
+  #   # network_mode: "host"
+  #   command: /app/init.sh
+  #   ports:
+  #     - "3031:3031"
+  #   # volumes:
+  #   #   - ./build:/build
+
+  mentored-backend:
+    build:
+      context: .
+      dockerfile: mentored-backend/Dockerfile
+    # network_mode: "host"
+    # command: /app/init.sh
+    # command: uwsgi --socket 0.0.0.0:3031 --wsgi-file sp_django/wsgi.py --buffer-size=32768
+    command: uwsgi --socket 0.0.0.0:3031 --master --buffer-size=32768 --wsgi-file sp_django/wsgi.py --chmod-socket=666 --enable-threads --processes 2 --lazy-apps
+    ports:
+      - "3031:3031"
+    volumes:
+      - ./experiment-data-path:/experiment-data-path/
+      - ./mentored-backend:/app/
+      - ./kubeconfig:/root/.kube/config
+
+  nginx-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx-server
+    ports:
+      # - "8081:80"
+      - "80:80"
+    volumes:
+      - ./build-prod/dist:/usr/share/nginx/html
+      - ./build-tutorial-prod/site:/mkdocs_tutorial/
+      - ./cert.cer:/etc/ssl/certs/mentored-cert.cer
+      - ./cert.key:/etc/ssl/private/mentored-cert.key
+    depends_on:
+      - mentored-backend
+

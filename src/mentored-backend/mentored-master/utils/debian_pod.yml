@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: mentored
+  name: debian-pod
+  annotations:
+    # k8s.v1.cni.cncf.io/networks: macvlan-dhcp-whx-sc
+    # k8s.v1.cni.cncf.io/networks: macvlan-dhcp-whx-df
+    # k8s.v1.cni.cncf.io/networks: macvlan-dhcp-ids-pe
+    k8s.v1.cni.cncf.io/networks: macvlan-3169-mentored-ids-df
+    # k8s.v1.cni.cncf.io/networks: macvlan-3169-mentored-whx-es
+  labels:
+    actor: debian-pod
+spec:
+  # nodeName: whx-sc
+  # nodeName: whx-df
+  # nodeName: ids-pe
+  nodeName: ids-df
+  # nodeName: whx-es
+  volumes:
+    - name: nginx-pv-storage
+      persistentVolumeClaim:
+        claimName: meuapp-pvc2
+  containers:
+  - name: tcpdump
+    image: debian:stable
+    imagePullPolicy: "IfNotPresent"
+    # command: ["tcpdump"]
+    command: ["tail", "-f", "/dev/null"]
+    securityContext:
+      privileged: true
+      capabilities:
+        add:
+          - NET_ADMIN
+    # args: ["-i", "net1", "-w","pcaps/server.pcap"]
+    volumeMounts:
+      - mountPath: "/app/pcaps/"
+        name: nginx-pv-storage
+  nodeSelector:
+#    kubernetes.io/hostname: whx-sc
+    # kubernetes.io/hostname: whx-df
+    # kubernetes.io/hostname: ids-pe
+    kubernetes.io/hostname: ids-df
+    # kubernetes.io/hostname: whx-es

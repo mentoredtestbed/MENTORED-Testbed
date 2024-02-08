@@ -1,0 +1,17 @@
+FROM nginx:alpine
+
+# Remove the default Nginx configuration
+RUN rm -f /etc/nginx/conf.d/*
+
+# Copy your custom Nginx configuration
+COPY nginx.prod.conf /etc/nginx/conf.d/
+COPY mentored-backend/uwsgi_params /etc/nginx/conf.d/
+COPY mentored-backend/ /opt/sp_django/
+# Copy the built static site files into the Nginx document root
+# COPY --from=build /app/@elegantstack/site/public /usr/share/nginx/html
+
+# Expose port 80 to the host machine
+EXPOSE 80
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]

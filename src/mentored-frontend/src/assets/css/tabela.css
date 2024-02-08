@@ -1,0 +1,48 @@
+th,
+td {
+    height: 3rem;
+}
+
+.header-table {
+    background: #103559;
+    border-radius: 1vw 1vw 0vw 0vw;
+}
+
+.title-table {
+    font-weight: 700;
+    font-size: 2vw;
+    text-transform: capitalize;
+
+    color: #FDFDFD;
+}
+
+.search {
+    font-style: italic;
+    font-size: 1vw;
+}
+
+.search-iconeStyle {
+    height: auto;
+    width: 2vw;
+    color: #FDFDFD;
+}
+
+.text-label {
+    font-size: 1.4vw;
+}
+
+.table-icons {
+    height: auto;
+    width: 1.5vw;
+    cursor: pointer;
+}
+
+.experiment-name {
+    font-weight: 700;
+    font-size: 1vw;
+}
+
+.table-background {
+    background: #F0FAFF;
+    border-radius: 0vw 0vw 1vw 1vw;
+}

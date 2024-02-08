@@ -1,0 +1,8 @@
+build-prod/
+build-tutorial-prod/
+cert.cer
+cert.key
+kubeconfig
+rootpwd
+certificates/
+.env

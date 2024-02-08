@@ -1,0 +1,24 @@
+Experiment:
+  name: exemplo_mentored_simples
+  nodeactors:
+    - name: 'nodeactor-name-1'
+      region: 'ids-sc'
+      replicas: 3
+      containers:
+        - name: 'arm-slowlories-1'
+          image: arm64v8/ubuntu:latest
+          command: ["sleep", "10000"]
+    - name: 'nodeactor-name-2'
+      replicas: 2
+      containers:
+        - name: 'arm-slowlories-2'
+          image: arm64v8/ubuntu:latest
+          command: ["sleep", "10000"]
+      region: 'ids-go'
+    - name: 'nodeactor-name-3'
+      replicas: 1
+      containers:
+        - name: 'arm-slowlories-3'
+          image: arm64v8/ubuntu:latest
+          command: ["sleep", "10000"]
+      region: 'ids-pe'

@@ -1,0 +1,25 @@
+# Use an official Node.js image (version 18) as the build environment
+FROM node:18 AS build
+
+WORKDIR /app/
+
+RUN npm install vite
+# npm install @babe/core
+
+# Set the working directory
+
+# Copy the rest of the application code
+COPY mentored-frontend/package-lock.json .
+COPY mentored-frontend/package.json .
+RUN npm install --legacy-peer-deps
+
+COPY mentored-frontend .
+
+COPY frontend-build-entrypoint.sh .
+
+# Install dependencies
+# RUN cd @elegantstack/site && npm install
+# Build the static site
+# RUN cd @elegantstack/site && npm run build
+
+# Use an official Nginx image to serve the static site

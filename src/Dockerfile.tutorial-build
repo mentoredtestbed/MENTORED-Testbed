@@ -1,0 +1,13 @@
+# Use an official Node.js image (version 18) as the build environment
+FROM python:3
+
+WORKDIR /app/
+
+# Set the working directory
+
+# Copy the rest of the application code
+COPY Testbed-Tutorial .
+
+RUN pip install mkdocs mkdocs-material mkdocs-static-i18n==0.56
+
+COPY tutorial-build-entrypoint.sh .

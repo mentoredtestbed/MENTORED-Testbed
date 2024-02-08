@@ -1,0 +1,190 @@
+# Project information
+site_name: MENTORED Testbed - Tutorial
+site_url:  https://portal.mentored.ccsc-research.org/tutorial
+
+# Copyright
+copyright: Copyright &copy; 2020 - 2023 MENTORED Project
+
+# Configuration
+theme:
+  name: material
+  custom_dir: theme
+  logo: img/logo2.png
+  favicon: img/logo.png
+  features:
+    - navigation.expand
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    # - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      accent: white
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Arial
+    code: Roboto Mono
+
+plugins:
+  - search
+  - i18n:
+      languages:
+        en: '<img style="height: 40px; vertical-align: middle;" alt="en" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/72x72/1f1fa-1f1f8.png" title="english" /> English'
+        pt: '<img style="height: 40px; vertical-align: middle;" alt="pt" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/72x72/1f1e7-1f1f7.png" title="português" /> Português'
+      default_language: "en"
+      no_translation:
+        pt: "Esta página não está traduzida para o Português."
+        en: "This page isn't translated to English."
+      translate_nav:
+        pt:
+          About: "Sobre"
+          Getting started: "Primeiros Passos"
+          First Steps: "Primeiros Passos"
+          Portal Features: "Funcionalidades do Portal"
+          Login: "Login"
+          How do I log in?: "Como faço para logar?"
+          How to create a experiment?: "Como criar um experimento?"
+          Define an experiment: "Definir um experimento"
+          Experiment definition page: "Página de definição de experimento"
+          How can I create an experiment?: "Como posso criar um experimento?"
+          By uploading the YAML file: "Ao enviar o arquivo YAML"
+          How to create the YAML file: "Como criar o arquivo YAML"
+          Execute a Experiment: "Executar um experimento"
+          Experiment execution page: "Página de execução de experimento"
+          How can I execute an experiment?: "Como posso executar um experimento?"
+          How to use the Real Time Monitor?: "Como usar o Monitoramento em Tempo Real?"
+          Examples: "Exemplos"
+          YAML file examples: "Exemplos de arquivos YAML"
+          Viewing and managing experiment definitions: "Como visualizar e gerenciar definições de experimentos"
+          Viewing experiment code: "Visualização do código do experimento"
+          EEditing experiment code: "Edição do código do experimento"
+          Deleting an experiment definition: "Exclusão de uma definição de experimento"
+          FAQ - Frequently Asked Questions: "FAQ - Perguntas mais frequentes"
+        en:
+          About: "About"
+          Getting started: "Getting Started"
+          First Steps: "First Steps"
+          Portal Features: "Portal Features"
+          Login: "Login"
+          How do I log in?: "How do I log in?"
+          How to create a experiment?: "How to create an experiment?"
+          Define an experiment: "Define an experiment"
+          Experiment definition page: "Experiment definition page"
+          How can I create an experiment?: "How can I create an experiment?"
+          By uploading the YAML file: "By uploading the YAML file"
+          How to create the YAML file: "How to create the YAML file"
+          Execute a Experiment: "Execute a Experimet"
+          Experiment execution page: "Experiment execution page"
+          How can I execute an experiment?: "How can I execute an experiment"
+          How to use the Real Time Monitor?: "How to use the Real"
+          Examples: "Examples"
+          YAML file examples: "YAML file examples"
+          Viewing and managing experiment definitions: "Viewing and managing experiment definitions"
+          Viewing experiment code: "Viewing experiment code"
+          Editing experiment code: "Editing experiment code"
+          Deleting an experiment definition: "Deleting an experiment definition"
+          FAQ - Frequently Asked Questions: "FAQ - Frequently Asked Questions"
+
+# Page tree
+nav:
+  - About:
+      - index.md
+      - index.pt.md
+
+  - Getting started:
+      - First Steps: started.md
+      - First Steps: started.pt.md
+
+      - Portal Features: features.md
+      - Portal Features: features.pt.md
+
+      - Login:
+          - How do I log in?: login.md
+          - How do I log in?: login.pt.md
+
+  - How to create a experiment?:
+      - Define an experiment:
+          - Experiment definition page: definition.md
+          - Experiment definition page: definition.pt.md
+          - How can I create an experiment?:
+              - By uploading the YAML file: upload.md
+              - By uploading the YAML file: upload.pt.md
+              - How to create the YAML file: yaml.md
+              - How to create the YAML file: yaml.pt.md
+
+      - Execute a Experiment:
+          - Experiment execution page: execution.md
+          - Experiment execution page: execution.pt.md
+          - How can I execute an experiment?: execute.md
+          - How can I execute an experiment?: execute.pt.md
+          - How to use the Real Time Monitor?: monitoring.md
+          - How to use the Real Time Monitor?: monitoring.pt.md
+
+      # - Examples:
+      #     - YAML file examples: examples.md
+      #     - YAML file examples: examples.pt.md
+
+  - FAQ - Frequently Asked Questions: faq.md
+  - FAQ - Frequently Asked Questions: faq.pt.md
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/facebook
+      link: https://www.facebook.com/mentoredproject/
+  
+  alternate:
+    - name: "English (Home)"
+      link: ""
+      lang: en
+
+    - name: "Português (Home)"
+      link: index.pt/
+      lang: pt
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - attr_list
+  - admonition
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.superfences
+
+extra_css:
+  - extra.css

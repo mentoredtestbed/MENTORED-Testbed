@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+spec:
+  selector:
+    matchLabels:
+      actor: client
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        actor: client
+        type: oper
+        app: client
+      annotations:
+        # k8s.v1.cni.cncf.io/networks: macvlan-dhcp-ids-sc
+        # k8s.v1.cni.cncf.io/networks: macvlan-dhcp-ids-pe
+        # k8s.v1.cni.cncf.io/networks: macvlan-dhcp-whx-df
+        k8s.v1.cni.cncf.io/networks: macvlan-3169-mentored-ids-df
+        # k8s.v1.cni.cncf.io/networks: macvlan-3169-mentored-whx-es
+    spec:
+      nodeName: ids-df
+      containers:
+      - name: client
+        image: allexmagno/client
+        imagePullPolicy: "IfNotPresent"
+        env:
+          - name: SERVER
+            value: "10.1.1.153"
+        command: ["random_request"]
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - NET_ADMIN
+        resources:
+          requests:
+            memory: "64M"
+            cpu: "0.5"
+          limits:
+            memory: "128M"
+            cpu: "1"
+      nodeSelector:
+        # kubernetes.io/hostname: ids-sc
+        # kubernetes.io/hostname: ids-pe
+        # kubernetes.io/hostname: whx-df
+        kubernetes.io/hostname: ids-df
+        # kubernetes.io/hostname: whx-es
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #           - key: "kubernetes.io/hostname"
+    #             operator: NotIn
+    #             values: ["ids-mg"]

@@ -1,0 +1,9 @@
+:root {
+    --md-primary-fg-color:        #003459;
+    --md-primary-fg-color--light: #0000;
+    --md-primary-fg-color--dark:  #ffffff;
+  }
+
+.i18n-link {
+  display: none
+} 

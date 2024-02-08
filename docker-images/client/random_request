@@ -1,8 +1,0 @@
-#!/bin/sh
-
-while :; do
-	time1=`od -An -N1 -i /dev/random`
-	time=$(( $time1 % 30 ))
-        sleep $time
-	wget -q $SERVER
-done
