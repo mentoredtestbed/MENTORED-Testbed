@@ -28,13 +28,7 @@ export default function Executions() {
             <td className='col-md-2 '>{get_sortable_name(row)}</td>,
             <td className='col-md-2 text-center ' ><ExperimentExecutionMonitor className='table-icons' /></td>,
             <td className='col-md-2 text-center'><RiCheckboxBlankCircleFill className='table-icons' style={{ color: row.status === -1 ? 'gray' : row.status === 4 ? 'green' : 'yellow' }} /></td>,
-            <td className='col-md-2 text-center'><CRUDButton operation='download'
-                        name={get_sortable_name(row)}
-                        triggerFunction={() => {
-                            var urlDownload = "/api/api/experimentexecutions/experiment_download_data/"+row.id;
-                            window.location.href = urlDownload;
-                        }}
-            /></td>,
+            <td className='col-md-2 text-center'><FiDownload className='table-icons' /></td>,
             // <td className='col-md-2 text-center'><TiDeleteOutline className='table-icons' /></td>
             <td className='col-md-2 text-center'><CRUDButton operation='delete'
                                                   name={get_sortable_name(row)}
