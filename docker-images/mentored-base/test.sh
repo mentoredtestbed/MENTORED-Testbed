@@ -1,0 +1,5 @@
+#!/bin/bash
+
+MENTORED_EXP_IFNAME="${MENTORED_EXP_IFNAME:-net1}"
+
+echo $MENTORED_EXP_IFNAME

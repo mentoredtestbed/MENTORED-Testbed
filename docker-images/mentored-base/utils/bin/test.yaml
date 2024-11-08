@@ -1,0 +1,14 @@
+registry:
+- action_name: test
+  notes: ''
+  timestamp: '2024-08-24 15:43:35'
+  timestamp_as_int: 1724525016
+- action_name: test
+  notes: test2
+  timestamp: '2024-08-24 15:43:49'
+  timestamp_as_int: 1724525029
+- action_name: test
+  notes: test 3
+  timestamp: '2024-08-24 15:44:04'
+  timestamp_as_int: 1724525044
+version: 0

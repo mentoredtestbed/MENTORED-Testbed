@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mentored-get-ip.py "$@"

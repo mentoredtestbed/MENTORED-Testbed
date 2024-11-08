@@ -1,0 +1,5 @@
+#!/bin/bash
+
+iptables -i net1 -A INPUT -s $1 -j DROP
+sleep $2
+iptables -i net1 -D INPUT -s $1 -j DROP
