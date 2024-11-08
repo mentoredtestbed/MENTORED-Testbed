@@ -1,0 +1,3 @@
+[submodule "slowloris-slim/slowloris"]
+	path = slowloris-slim/slowloris
+	url = https://github.com/gkbrk/slowloris.git
