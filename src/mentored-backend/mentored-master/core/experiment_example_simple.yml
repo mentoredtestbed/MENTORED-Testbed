@@ -3,12 +3,11 @@ Experiment:
   
   nodeactors:
     - name: 'nodeactor-name-1'
-      region: 'whx-es'
+      region: 'ids-go'
       replicas: 2
       containers: 'meu_device_software1'
     - name: 'nodeactor-name-2'
       replicas: 2
       containers: 'meu_device_software2'
-      region: 'ids-mg'
-  
-  topology: 'ovs_fully_connected'
+      region: 'ids-pe'
+  topology: None

@@ -1,48 +1,81 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import Home from '../layouts/home';
-import { useSelector } from 'react-redux';
-import { RootState } from '../stores/reducers';
 import { useTranslation } from 'react-i18next';
-import '../assets/css/index.css'
-import { MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem } from 'mdb-react-ui-kit';
-import Header from './components/Header'
-import '../assets/css/login.css'
+import { useNavigate } from 'react-router-dom';
 
+import Home from '../layouts/home';
 
-export default function Login() {
-    const [name, setName] = useState('');
-    const navigate = useNavigate()
-    const username = useSelector((state: RootState) => state.user); 20
-    const { t } = useTranslation()
+import '../assets/css/index.css';
+import '../assets/css/login.css';
 
-    return (
-        <Home>
-            <Header />
-            <div className="top-35vh">
-                <div className="d-flex align-items-center justify-content-center bottom-6vh mb-6vh" >
-                    <h1 className="login-subtitle text-center capitalize" >
-                        {t('login.projectvinculation1')}
-                        <br />
-                        {t('login.projectvinculation2')}
-                    </h1>
-                </div>
-                <div className='d-flex align-items-center justify-content-center mb-18vh'>
-                    <button className="enter-button" onClick={() => navigate("/dashboard")}>
-                        <span>{t('login.project')}</span>
-                    </button>
-                </div>
-                <div className='d-flex align-items-center justify-content-center '>
-                    <select className='project-selection'>
-                        <option value="project1">Project 1</option>
-                        <option value="project2">Project 2</option>
-                        <option value="project3">Project 3</option>
-                        <option value="project4">Project 4</option>
-                        <option value="project5">Project 5</option>
-                    </select>
-                </div>
+const login = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  let logged = JSON.parse(localStorage.getItem('logged'));
+  let login_data = JSON.parse(localStorage.getItem('login_data'));
+  let status = login_data?.user?.status // PendingConfirmation PendingApproval
+
+  return (
+    <Home>
+      <div className="top-35vh">
+        <div className="d-flex align-items-center justify-content-center mb-3vh">
+          <h1 className="index-subtitle">{t('home.subtitle')}</h1>
+        </div>
+
+        {status !== "Active"  &&
+            <>
+            {status === "PendingConfirmation" ? 
+            <div className="d-flex align-items-center justify-content-center mb-3vh">
+              <h1 className="index-subtitle text-danger">{t('login.pendingConfirmationText')}</h1>
             </div>
-        </Home>
-    );
-}
+            : status === "PendingApproval" ?
+            <div className="d-flex align-items-center justify-content-center mb-3vh">
+              <h1 className="index-subtitle text-danger">{t('login.pendingApprovalText')}</h1>
+            </div>
+            :
+            <>
+              <div className="d-flex align-items-center justify-content-center mb-3vh">
+                <h1 className="index-subtitle text-danger">{t('login.subtitle')}</h1>
+              </div>
+              <div className="d-flex align-items-center justify-content-center mt-5vh">
+                <a href="/registry/co_petitions/start/coef:6">
+                <button className="enter-button">
+                  <span>{t('login.register')}</span>
+                </button>
+                </a>
+              </div>
+            </>
+            }
+            </>
+        }
 
+        
+
+        
+        <div className="d-flex align-items-center justify-content-center mt-5vh">
+          {logged ? 
+            <a href="/api/logout/">
+            <button className="enter-button">
+              <span>{t('login.return')}</span>
+            </button>
+            </a>
+          :
+            <a href="/">
+            <button className="enter-button">
+              <span>{t('login.return')}</span>
+            </button>
+            </a>
+          }
+          
+        </div>
+        <p className="text-center description-text mt-5vh">
+          {t('home.description1')}
+          <br />
+          {t('home.description2')}
+          <br />
+          {t('home.description3')}
+        </p>
+      </div>
+    </Home>
+  );
+};
+
+export default login;

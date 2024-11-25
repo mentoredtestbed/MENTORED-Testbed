@@ -1,0 +1,21 @@
+export default {
+    delete: 'Delete',
+    update: 'Update',
+    join: 'Join',
+    leave: 'Leave',
+    remove: 'Remove',
+    deactivate: 'Deactivate',
+    activate: 'Activate',
+    text: 'Are you sure you want to ',
+    downloadAction: 'download ',
+    deleteAction: 'delete ',
+    updateAction: 'update ',
+    joinAction: 'join ',
+    removeAction: 'remove ',
+    leaveAction: 'leave',
+    deactivateAction: 'deactivate ',
+    activateAction: 'activate ',
+    confirm: 'Yes',
+    deny: 'No',
+};
+  

@@ -1,0 +1,7 @@
+.table-container {
+    /* Set the maximum height of the container */
+    overflow-y: none;
+    /* Enable vertical scrolling for overflow */
+    position: relative;
+    border-radius: 0vw 0vw 1vw 1vw;
+}

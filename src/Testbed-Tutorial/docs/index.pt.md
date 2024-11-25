@@ -17,7 +17,7 @@ O MENTORED project é um projeto cooperativo entre a Universidade Federal de Min
 
 3. Fornecer à comunidade científica de segurança cibernética um ambiente de testes para permitir que os pesquisadores experimentem suas soluções relacionadas a ataques DDoS.
 
-Para obter mais detalhes sobre o projeto, visite [https://mentored.dcc.ufmg.br/](www.mentored.dcc.ufmg.br/)
+Para obter mais detalhes sobre o projeto, visite [https://mentored.dcc.ufmg.br](https://mentored.dcc.ufmg.br)
 
 ## O que é o MENTORED Testbed?
 

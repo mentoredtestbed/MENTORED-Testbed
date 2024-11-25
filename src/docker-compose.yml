@@ -1,14 +1,49 @@
 version: '3'
+volumes:
+     mini-kube-volume:
 services:
-  frontend-build:
+  webkubectl:
+    image: ghcr.io/mentoredtestbed/webkubectl:latest
+    environment:
+      - GOTTY_OPTIONS=--permit-arguments --port 8080 --permit-write
+    privileged: true
+    volumes:
+      - mini-kube-volume:/root/.minikube
+    ports:
+      - "8081:8080"
+
+  # Use the following service to build the frontend if you are not using the frontend-runner service
+  # Make sure to update3 nginx.conf to point to the correct build directory
+  # frontend-build:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.frontend-build
+  #   network_mode: "host"
+  #   command: /app/frontend-build-entrypoint.sh
+  #   volumes:
+  #     - ./build-prod:/build
+  #     - .env:/app/.env
+
+  local-cluster:
+    build:
+      context: ./local-cluster
+    privileged: true
+    command: ./local-cluster-entrypoint.sh
+    volumes:
+      - ./local-cluster-minikube-config:/root/.kube-minikube
+      - mini-kube-volume:/root/.minikube
+    ports:
+      - "8443:8443"
+
+  frontend-runner:
     build:
       context: .
       dockerfile: Dockerfile.frontend-build
-    network_mode: "host"
-    command: /app/frontend-build-entrypoint.sh
+    command: npm run dev
     volumes:
-      - ./build-prod:/build
       - .env:/app/.env
+      - ./mentored-frontend/src/:/app/src/
+
   tutorial-build:
     build:
       context: .
@@ -18,6 +53,7 @@ services:
     volumes:
       - ./build-tutorial-prod:/build-tutorial
 
+  # TODO: Enable run-time updates for the backend
   # mentored-backend:
   #   build:
   #     context: .
@@ -33,24 +69,23 @@ services:
     build:
       context: .
       dockerfile: mentored-backend/Dockerfile
-    # network_mode: "host"
-    # command: /app/init.sh
-    # command: uwsgi --socket 0.0.0.0:3031 --wsgi-file sp_django/wsgi.py --buffer-size=32768
-    command: uwsgi --socket 0.0.0.0:3031 --master --buffer-size=32768 --wsgi-file sp_django/wsgi.py --chmod-socket=666 --enable-threads --processes 2 --lazy-apps
+    command: uwsgi --socket 0.0.0.0:3031 --master --buffer-size=32768 --wsgi-file sp_django/wsgi.py --chmod-socket=666 --enable-threads --processes 2 --lazy-apps --ini uwsgi_config.ini
     ports:
       - "3031:3031"
     volumes:
       - ./experiment-data-path:/experiment-data-path/
       - ./mentored-backend:/app/
-      - ./kubeconfig:/root/.kube/config
+      - ./local-cluster-minikube-config:/root/.kube-minikube
+      - mini-kube-volume:/root/.minikube
+    env_file:
+      - .env
 
   nginx-server:
     build:
       context: .
       dockerfile: Dockerfile.nginx-server
     ports:
-      # - "8081:80"
-      - "80:80"
+      - "3000:80"
     volumes:
       - ./build-prod/dist:/usr/share/nginx/html
       - ./build-tutorial-prod/site:/mkdocs_tutorial/

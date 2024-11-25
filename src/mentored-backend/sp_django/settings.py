@@ -15,16 +15,66 @@ import os
 import saml2
 import saml2.saml
 
-from secret_key import SECRET_KEY
+#from secret_key import SECRET_KEY
 # os.environ['HTTPS'] = "on"
 
 ####################### MENTORED CONFIGURATION  ################################
 EXPERIMENT_DATA_PATH="/experiment-data-path/"
+
+RELEASE_MODE = os.getenv('RELEASE_MODE', 'production')
+DEFAULT_KUBECONFIG_PATH = os.getenv('DEFAULT_KUBECONFIG_PATH', '/root/.kube/config')
+
 ################################################################################
 
 SECURE_SSL_REDIRECT=False
 SESSION_COOKIE_SECURE=False
 CSRF_COOKIE_SECURE=False
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': None,
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'django.template': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+
+    ),
+}
+
+
+
 
 # SECURE_CONTENT_TYPE_NOSNIFF = False
 # SECURE_BROWSER_XSS_FILTER = False
@@ -41,9 +91,10 @@ CSRF_COOKIE_SECURE=False
 # CERT_DIR = "certificates"
 
 
+# Load DOMAIN from env
+DOMAIN = os.getenv('DOMAIN', 'localhost')
 
-# DOMAIN='mentored-testbed.cafeexpresso.rnp.br'
-DOMAIN='portal.mentored.ccsc-research.org'
+# DOMAIN='portal.mentored.ccsc-research.org'
 # PORT = "80"
 # FQDN = "http://"+DOMAIN+":"+PORT
 FQDN = "https://"+DOMAIN
@@ -60,7 +111,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = ''
+SECRET_KEY = 'jhj32h4h34jh4jh3h4h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -132,6 +183,8 @@ INSTALLED_APPS = [
     'api',
 
     'corsheaders',
+
+    'drf_yasg',
 ]
 
 

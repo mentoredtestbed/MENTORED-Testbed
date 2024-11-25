@@ -3,6 +3,16 @@
     border-radius: 1vw;
 }
 
+
+.text-dynamic {
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: 700;
+    /* transition: font-size 0.2s ease-in-out; */
+}
+
 .title>h1 {
     font-weight: 700;
     font-size: 2vw;
@@ -21,10 +31,11 @@
     color: #FDFDFD;
 }
 
-.newrequest-newdefinition-button:hover {
+.newrequest-newdefinition-button:hover, .title-option:hover {
     color: #FDFDFD;
+    opacity: 0.8;
 }
 
 .table-size {
-    height: 70vh;
+    height: 73vh;
 }

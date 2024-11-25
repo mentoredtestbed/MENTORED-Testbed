@@ -1,0 +1,17 @@
+.btn-custom-secondary {
+    background-color: #12293E;
+    border-color: #12293E;
+}
+  
+.btn-custom-primary {
+  background-color: #12293E;
+  border-color: #12293E;
+}
+
+.btn-custom-primary:hover {
+  background-color: #777e82;
+}
+
+.btn-custom-secondary:hover {
+  background-color: #777e82;
+}

@@ -1,3 +1,5 @@
+.env.production
+
 # Logs
 logs
 *.log
@@ -25,3 +27,8 @@ dist-ssr
 
 # Local Netlify folder
 .netlify
+.eslintignore
+.prettierignore
+.prettierrc.json
+.eslintrc.json
+.prettierrc.js

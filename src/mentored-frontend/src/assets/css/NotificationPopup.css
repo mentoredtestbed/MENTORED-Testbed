@@ -1,0 +1,84 @@
+.dropdown-menu {
+    max-height: 500px;
+    max-width: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    left: auto !important;
+    right: 60px !important;
+    transform: none !important;
+}
+
+.dropdown-item:last-child {
+    margin-bottom: 0; /* Ensure there's no extra space at the bottom */
+}
+
+.dropdown-item {
+    width: 400px;
+    user-select: none;
+}
+
+.dropmsg {
+    width: 500px;
+    max-width: 500px;
+}
+
+.msg-container {
+    background-color: #F0FAFF;
+    border-radius: 2vw;
+    padding: 0.5vw;
+    margin: 1vh;
+}
+
+.msgcontent {
+    margin-right: 1vw;
+    white-space: pre-wrap;
+    text-align: justify;
+}
+
+.msg-info {
+    display: flex;
+    justify-content: space-between;
+    color: #003459;
+    font-weight: 700;
+    font-size: 1.5vh;
+    user-select: none;
+}
+
+
+.msgtime {
+    margin-right: 1vw;
+}
+
+.msgsender {
+    margin-right: 1vw;
+}
+
+.notification-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-iconStyle {
+    font-size: 60px; /* Adjust to your desired size */
+    color: white;
+}
+
+.notification-count {
+    position: absolute;
+    top: 5px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 18px; /* Font size of the badge text */
+    line-height: 1;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 20px;
+    height: 20px;
+    z-index: 10; /* Ensure badge is on top */
+    user-select: none;
+}

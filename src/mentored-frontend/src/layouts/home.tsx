@@ -42,4 +42,4 @@ export default function Home({ children }: { children: React.ReactNode }) {
       <Footer />
     </div>
   );
-}       
+}      

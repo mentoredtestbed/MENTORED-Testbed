@@ -1,23 +1,30 @@
-import React, { Suspense, useState } from 'react'
-import logo from './logo.svg'
+import React, { Suspense } from 'react';
+import { useRoutes } from 'react-router-dom';
 
-import { useRoutes } from 'react-router-dom'
-
-import routes from '~react-pages'
+import CircularProgress from '@material-ui/core/CircularProgress';
+import routes from '~react-pages';
 
 function App() {
-
   return (
-    <div className='w-full m-0 dark:bg-primary-800 root'>
-
-      <Suspense fallback={<p>Loading...</p>}>
-
+    <div className="w-full m-0 dark:bg-primary-800 root">
+      <Suspense
+        fallback={
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh',
+            }}
+          >
+            <CircularProgress />
+          </div>
+        }
+      >
         {useRoutes(routes)}
-
       </Suspense>
-
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

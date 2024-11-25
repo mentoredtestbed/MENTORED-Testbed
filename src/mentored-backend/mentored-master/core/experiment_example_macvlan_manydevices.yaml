@@ -1,0 +1,25 @@
+Experiment:
+  name: exemplo_mentored_simples
+  nodeactors:
+    - name: 'nodeactor-name-1'
+      region: 'ids-go'
+      replicas: 30
+      containers:
+        - name: 'arm-slowlories-1'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          command: ["sleep", "INF"]
+    - name: 'nodeactor-name-2'
+      replicas: 33
+      containers:
+        - name: 'arm-slowlories-2'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          command: ["sleep", "INF"]
+      region: 'ids-pe'
+    - name: 'nodeactor-name-3'
+      replicas: 2
+      containers:
+        - name: 'arm-slowlories-3'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          command: ["sleep", "INF"]
+      region: 'ids-pb'
+  topology: None

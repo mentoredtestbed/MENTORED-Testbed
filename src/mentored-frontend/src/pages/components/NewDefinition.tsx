@@ -1,26 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/css/NewDefinition.css';
-import { AiOutlineCloseSquare } from "react-icons/ai";
 import { useTranslation } from 'react-i18next';
 import {mentored_api} from "../../utils/useAxios";
+import { AiOutlineCloseSquare } from "react-icons/ai";
 
 import NewExperimentDefinition from '../../components/core/NewExperimentDefinition';
 
-
-function NewDefinition() {
+function NewDefinition({ projectId }) {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleButtonClick = () => {
     setShowPopup(true);
-  }
+  };
 
   const handleClosePopup = () => {
     setShowPopup(false);
   }
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+  }, []);
+
+  
+  const escFunction = (event) => {
+    if (event.key === "Escape") {
+      handleClosePopup();
+      // document.removeEventListener("keydown", escFunction, false);
+    }
+  }
+
   const { t } = useTranslation();
 
-  let title = t('newdefinition.title')
-  let description = t('newdefinition.description')
+  const title = t('newdefinition.title');
+  const description = t('newdefinition.description');
   // (<>
   //   Here it is possible to create an experiment definition. First, assign a name to this definition and then upload the YAML file with the description. The documentation related to the YAML file format description can be found in <a href="https://portal.mentored.ccsc-research.org/tutorial">portal.mentored.ccsc-research.org/tutorial</a>
   // </>);
@@ -32,41 +44,48 @@ function NewDefinition() {
   return (
     <div>
       {showPopup ? (
-        <div className="popup-overlay " >
+        <div className="popup-overlay ">
           <div className="popup-content">
-
             <div className="popup-header ">
-              <button className="popup-page-chooser-container File col-md-2">{t('newdefinition.uploadmode')}</button>
-              <button className="popup-page-chooser-container Web col-md-2">{t('newdefinition.webmode')}</button>
-              <AiOutlineCloseSquare onClick={handleClosePopup} className="close-button ml-70vw " />
+              <div className='popup-title-header'>
+                <h2 className='popup-title-container'>
+                  {title}
+                </h2>
+                <AiOutlineCloseSquare onClick={handleClosePopup} className="close-button" />
+              </div>
             </div>
 
             <div className="container-fluid mt-3vh">
+              <div className='popup-header-mode'>
+                <button className="popup-page-chooser-container File col-md-2">{t('newdefinition.uploadmode')}</button>
+                <button className="popup-page-chooser-container Web col-md-2">{t('newdefinition.webmode')}</button>
+              </div>
               <div className="row ">
                 <div className="col-md-6">
-                  <NewExperimentDefinition></NewExperimentDefinition>
+                  <NewExperimentDefinition projectId={projectId}/>
                 </div>
                 <div className="background-rectangle-Definition col-md-6">
-                  <h2 className='popup-title-container '>
+                  {/* <h3 className='popup-title-container '>
                     {title}
-                  </h2>
+                  </h3> */}
                   <p className='popup-text-container '>
                     {description}  <a href={tutorial_url}>{tutorial_url_display}</a>.
                   </p>
                 </div>
               </div>
             </div>
-
           </div>
-        </div >
-      ) : null
-      }
-      <button onClick={handleButtonClick} className="newrequest-newdefinition-button top-5 h-11vh button-text text-center capitalize">
-        {t('newdefinition.button1')}
+        </div>
+      ) : null}
+      <button
+        onClick={handleButtonClick}
+        className="newrequest-newdefinition-button top-5 h-11vh button-text text-center capitalize"
+      >
+        {t('newdefinition.upButtonText')}
         <br />
-        {t('newdefinition.button2')}
+        {t('newdefinition.downButtonText')}
       </button>
-    </div >
+    </div>
   );
 }
 

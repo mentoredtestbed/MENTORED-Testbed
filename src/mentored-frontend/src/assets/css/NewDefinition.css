@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 10;
 }
 
 .popup-content {
@@ -16,21 +16,80 @@
     padding: 1vw;
     border-radius: 1vw;
 
-    height: 75%;
+    height: 85%;
     width: 75%;
     position: fixed;
 
     border: #FFFFFF 0.7vh solid;
 }
 
+.popup-body {
+    overflow-y: scroll;
+    height: 92%;
+    width: 99.5%;
+    top: 0;
+    margin:0;
+    padding:0;
+}
+
+.yaml-editor {
+    height: 100%;
+    width: 95%;
+}
+
 .close-button {
     cursor: pointer;
-    background-color: #ff0000;
     color: white;
     width: 2.5vw;
     height: auto;
     position: fixed;
     right: 1vw;
+    border-radius: 5px;
+    font-size: 2vw;
+    /* Set font style */
+}
+
+.save-button {
+    cursor: pointer;
+    /* background-color: #ff0000; */
+    color: white;
+    width: 2.5vw;
+    height: auto;
+    position: fixed;
+    right: 1vw;
+    left: 1vw;
+}
+
+.clone-button {
+    cursor: pointer;
+    /* background-color: #ff0000; */
+    color: white;
+    width: 2.5vw;
+    height: auto;
+    position: fixed;
+    left: 4vw;
+}
+
+.download-button {
+    cursor: pointer;
+    /* background-color: #ff0000; */
+    color: white;
+    width: 2.5vw;
+    height: auto;
+    position: fixed;
+    left: 7vw;
+}
+
+.version-button {
+    width: auto;
+    height: auto;
+    position: fixed;
+    right: 4vw;
+}
+
+.save-button:hover, .close-button:hover, .download-button:hover, .clone-button:hover {
+    color: #FDFDFD;
+    opacity: 0.8;
 }
 
 .popup-title-container {
@@ -39,14 +98,30 @@
     font-weight: 700;
     font-size: 2vw;
     text-transform: capitalize;
-    color: #003459;
+    color: #FDFDFD;
+    margin-top: 0vh;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+}
+
+.popup-title-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    height: fit-content;
 }
 
 .popup-text-container {
+    position: relative;
     margin-left: 1.5vw;
     margin-top: 2vh;
     font-size: 1vw;
     color: #003459;
+    height: 100%;
 }
 
 .popup-page-chooser-container {
@@ -59,4 +134,12 @@
 .background-rectangle-Definition {
     background: #F0FAFF;
     height: fit-content;
+}
+
+.popup-header-mode {
+    margin-bottom: 10px;
+}
+
+.CodeMirror {
+    height: 100% !important;
 }

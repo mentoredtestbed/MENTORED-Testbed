@@ -18,6 +18,8 @@ import warnings
 from MentoredDeviceSoftware import MentoredDeviceSoftware
 from MentoredNetworking import MentoredNetworkingKubectl
 from MentoredVolume import MentoredVolume
+from MentoredCluster import MentoredCluster
+from MentoredExperimentValidator import MentoredExperimentValidator
 
 import argparse
 
@@ -27,74 +29,26 @@ import itertools
 
 from collections import defaultdict
 
-class MentoredDataService():
-  def __init__(self):
-    pass
-  
-  def get_device_software(self, name_id):
-    database = {
-      'meu_device_software1': [
-        {
-          "name": "meu-device-software1",
-          # "image": 'python:3.6.15-buster',
-          "image": 'ghcr.io/brunomeyer/generic-botnet',
-          "command": ["tail", "-f", "/dev/null"],
-          "imagePullPolicy": "IfNotPresent",
-          "stdin": True,
-          "tty": True,
-          "securityContext": {
-            "privileged": True,
-            "capabilities": {
-              "add": [
-                "NET_ADMIN"
-              ]
-            }
-          },
-        }
-      ],
-
-      'meu_device_software2': [
-        {
-          "name": "meu-device-software2",
-          # "image": 'python:3.6.15-buster',
-          "image": 'ghcr.io/brunomeyer/generic-botnet',
-          "command": ["tail", "-f", "/dev/null"],
-          "imagePullPolicy": "IfNotPresent",
-          "stdin": True,
-          "tty": True,
-          "securityContext": {
-            "privileged": True,
-            "capabilities": {
-              "add": [
-                "NET_ADMIN"
-              ]
-            }
-          },
-        }
-      ],
-    }
-
-    if name_id in database:
-      return database[name_id]
-    else:
-      return None
+from MentoredDataService import MentoredDataService
 
 class MentoredExperiment(MentoredComponent):
   def __init__(self,
                namespace,
                kubeconfig_path='/root/.kube/config',
                fname=None,
-               user_name='bruno',
+               user_name='root',
                exp_id=0,
                host_data_path="./persistent-data"):
+
     super().__init__(namespace)
-    
+
     self.name = None
     self.timeout_warmup = None
     self.timeout_experiment = None
     self.containers_set = None
     self.nodeactors = None
     self.topology = None
+
 
     self.default_timeout_warmup = 10
     self.default_timeout_experiment = 60
@@ -104,7 +58,7 @@ class MentoredExperiment(MentoredComponent):
     self.exp_id = exp_id
     self.kubeconfig_path = kubeconfig_path
     self.host_data_path = host_data_path
-    
+
   def from_yaml(self, fname):
     with open(fname, "r") as stream:
       try:
@@ -112,7 +66,7 @@ class MentoredExperiment(MentoredComponent):
           data = data['Experiment']
       except yaml.YAMLError as exc:
           print(exc)
-    
+
     service = MentoredDataService()
 
     self.name = data['name']
@@ -126,7 +80,7 @@ class MentoredExperiment(MentoredComponent):
       self.timeout_experiment = data['timeout_experiment']
     else:
       self.timeout_experiment = self.default_timeout_experiment
-      
+
     if 'containers_set' in data:
       self.containers_set = data['containers_set']
 
@@ -152,12 +106,12 @@ class MentoredExperiment(MentoredComponent):
       else:
         raise Exception('Invalid containers_set element.'
                         f'Only dict or str is valid:\n {cs}')
-    
+
     if 'topology' in data:
       self.topology = data['topology']
     else:
       self.topology = self.default_topology
-    
+
     default_persitent_volume_path = None
     if 'default_persitent_volume_path' in data:
       default_persitent_volume_path = data['default_persitent_volume_path']
@@ -173,15 +127,17 @@ class MentoredExperiment(MentoredComponent):
 
 
     # mn = MentoredNetworking(self.namespace)
-    mn = MentoredNetworkingKubectl(self.namespace, kubeconfig_path=self.kubeconfig_path)
+    mn = MentoredNetworkingKubectl(self.namespace,
+                                   pod_start_per_time=None, # TODO: Obtain this value from the database
+                                   kubeconfig_path=self.kubeconfig_path)
 
     mn.next_networking_id = self.exp_id
 
-    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id, default_persitent_volume_path=default_persitent_volume_path)
+    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id, default_persitent_volume_path=default_persitent_volume_path, kubeconfig_path=self.kubeconfig_path)
 
     exp_result = mn.create_kube_resources(self.user_name, self.nodeactors, exp_id=self.exp_id, wait_for_run=True, network_type=self.topology, mentored_volume=mv)
     print(exp_result)
-    
+
     # pods = mn.get_kube_resources(return_pods=True,
     #                              net_name=mn.net_name)
     # for pod_name in pods:
@@ -201,13 +157,25 @@ class MentoredExperiment(MentoredComponent):
   #                           ['test\n\n1\n', 'test2\n\n1\n'])
 
   def delete_kube_resources(self, networking_name, wait_for_create=False):
-    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id)
+    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id, kubeconfig_path=self.kubeconfig_path)
     mn = MentoredNetworkingKubectl(self.namespace, kubeconfig_path=self.kubeconfig_path)
     print(mn.delete_kube_resources(networking_name, wait_for_create=False, mentored_volume=mv), end="\n\n")
 
   def get_experiment_data(self):
-    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id)
+    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id, kubeconfig_path=self.kubeconfig_path)
     return mv.get_experiment_data()
+
+  def get_experiment_log(self):
+    mv = MentoredVolume(self.namespace, self.host_data_path, self.exp_id, kubeconfig_path=self.kubeconfig_path)
+    return mv.get_log_data()
+
+  def get_experiment_running_pods(self, networking_name):
+    mn = MentoredNetworkingKubectl(self.namespace, kubeconfig_path=self.kubeconfig_path)
+    return mn.get_nodeactors_names_as_list(networking_name)
+
+  def get_cluster_info(self):
+    mc = MentoredCluster(self.namespace, kubeconfig_path=self.kubeconfig_path)
+    return mc.get_kube_resources()
 
 if __name__ == "__main__":
 
@@ -220,7 +188,7 @@ if __name__ == "__main__":
   # namespace = "mentored-lab07"
   # namespace = "mentored-lab10"
   # namespace = "infect-4"
-  default_namespace = "sbrc3"
+  default_namespace = "grupo-2"
 
   parser = argparse.ArgumentParser(description='Process some integers.')
   parser.add_argument('-f', '--input_file', dest='input_file', required=True)
@@ -240,24 +208,33 @@ if __name__ == "__main__":
   namespace = args.namespace
   target = args.target
 
-  exp_username = "test-dev"
+  exp_username = "2"
   experiment_id = args.experiment_id
-  
-  target = "mentorednetworking{}-{}".format(experiment_id, exp_username)
 
-  
+  target = "mentored-{}-{}".format(experiment_id, exp_username)
 
-  me = MentoredExperiment(namespace, kubeconfig_path="/home/bhmeyer/.kube/config", user_name=exp_username, exp_id=experiment_id)
-  mn = MentoredNetworkingKubectl(namespace, kubeconfig_path="/home/bhmeyer/.kube/config")
+  # rel_path = "~/.kube/config.localcluster"
+  abs_path = None
+  if 'KUBECONFIG' not in os.environ:
+    print("KUBECONFIG not found in environment variables")
+    print("Defaulting to ~/.kube/config")
+    rel_path = "~/.kube/config"
+    abs_path = os.path.expanduser(rel_path)
+  else:
+    abs_path = os.getenv('KUBECONFIG')
+
+  me = MentoredExperiment(namespace, kubeconfig_path=abs_path, user_name=exp_username, exp_id=experiment_id)
+  mn = MentoredNetworkingKubectl(namespace, kubeconfig_path=abs_path)
 
   start_time = time.time()
-  
+
 
   if args.create:
     # me.from_yaml('experiment_example_simple.yml')
     me.from_yaml(args.input_file)
   if args.list:
-    print(json.dumps(mn.get_kube_resources(), indent=4, sort_keys=True), end="\n\n")
+    # print(json.dumps(mn.get_kube_resources(), indent=4, sort_keys=True), end="\n\n")
+    print(json.dumps(me.get_experiment_running_pods(target), indent=4, sort_keys=True), end="\n\n")
   if args.delete:
     # me.delete_kube_resources("mentorednetworking15-admin-mentored", wait_for_create=False)
     me.delete_kube_resources(target, wait_for_create=False)

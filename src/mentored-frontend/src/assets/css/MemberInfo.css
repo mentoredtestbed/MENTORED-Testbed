@@ -1,0 +1,39 @@
+.popup-member {
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    background-color: #103559;
+    padding: 1vw;
+    border-radius: 1vw;
+
+    height: 32%;
+    width: 35%;
+    position: fixed;
+
+    border: #FFFFFF 0.7vh solid;
+
+}
+
+.background-rectangle-Member {
+    background: #F0FAFF !important;
+}
+
+.formRequestList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  
+  .TextField .MuiInputBase-root {
+    flex: 1;
+  }
+  
+  .formRequestListTitle {
+    font-size: 2vh;
+    font-weight: 500;
+    color: black;
+    align-self: flex-end;
+    margin-bottom: 5px !important; 
+
+  }

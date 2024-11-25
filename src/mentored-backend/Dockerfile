@@ -28,3 +28,4 @@ RUN apt install -y python3-pip xmlsec1 python3-dev libssl-dev libsasl2-dev
 # RUN cd @elegantstack/site && npm run build
 
 # Use an official Nginx image to serve the static site
+RUN pip install numpy
