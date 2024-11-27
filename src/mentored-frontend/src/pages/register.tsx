@@ -1,13 +1,14 @@
-import { useState, useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import { useState, useContext } from 'react';
+
+import AuthContext from '../context/AuthContext';
 
 function Register() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const { registerUser } = useContext(AuthContext);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     registerUser(username, password, password2);
   };
@@ -22,7 +23,7 @@ function Register() {
           <input
             type="text"
             id="username"
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             placeholder="Username"
             required
           />
@@ -32,7 +33,7 @@ function Register() {
           <input
             type="password"
             id="password"
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required
           />
@@ -42,11 +43,11 @@ function Register() {
           <input
             type="password"
             id="confirm-password"
-            onChange={e => setPassword2(e.target.value)}
+            onChange={(e) => setPassword2(e.target.value)}
             placeholder="Confirm Password"
             required
           />
-          <p>{password2 !== password ? "Passwords do not match" : ""}</p>
+          <p>{password2 !== password ? 'Passwords do not match' : ''}</p>
         </div>
         <button>Register</button>
       </form>

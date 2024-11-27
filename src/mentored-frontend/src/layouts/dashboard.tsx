@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Footer from '../pages/components/Footer';
-import Header from '../pages/components/Header';
+import Header from '../components/layout/Header';
 // import SideBar from '../pages/SideBar';
-import SideBar from '../pages/components/SideBar';
+import SideBar from '../components/layout/SideBar';
 import 'chart.js/auto';
 import '../assets/css/dashboard-layout.css';
 

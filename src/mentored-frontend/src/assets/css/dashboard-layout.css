@@ -57,3 +57,8 @@
     font-size: 1vw;
     background-color: #00A7E7;
 }
+
+.users-bottom-link {
+    margin-bottom: 1vh;
+    padding-top: 250px;
+}

@@ -1,0 +1,17 @@
+Experiment:
+  name: slowlowris_experiment
+  nodeactors:
+    - name: 'ollama-model'
+      replicas: 1
+      containers:
+        - name: 'ollama'
+          image: ollama/ollama
+          volumeMounts:
+            - mountPath: "/mentored-storage-public"
+              readOnly: true
+              name: mentored-storage-public
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            privileged: true
+      region: 'ids-mg'
+  topology: None

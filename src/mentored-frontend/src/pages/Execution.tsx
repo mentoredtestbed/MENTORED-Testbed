@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Dashboard from '../layouts/dashboard';
 import { useTranslation } from 'react-i18next';
 import 'chart.js/auto';
 import '../assets/css/experiments.css'
 import SortableTable from "./components/SortableTable"
 import PopUp from "./components/NewExecution";
+import ExperimentDefinitionYAMLView from '../components/core/ExperimentDefinitionYAMLView';
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import { FiDownload } from "react-icons/fi";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -13,81 +14,173 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { mentored_api } from "../utils/useAxios";
 
 import ExperimentExecutionMonitor from "../components/core/ExperimentExecutionMonitor";
-import CRUDButton from '../components/core/CRUDButton'
+import CRUDButton from '../components/core/CRUDButton';
+import ConfirmationButton from '../components/core/Confirmation';
+import ProgressBar from './components/ProgressBar';
+import { GiReturnArrow } from "react-icons/gi";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import ExperimentExecutionStatus from './components/ExperimentExecutionStatus';
 
 const DEV = import.meta.env.DEV;
 
 
 export default function Executions() {
-    const { t } = useTranslation();
+    localStorage.setItem('isExperimentMonitorOpen', "");
+    localStorage.setItem('isNewExperimentExecutionOpen', "");
 
-    let projectTitle = t('table.project') + " 1";
+    const { t } = useTranslation();
+    const { state } = useLocation();
+    const project_id = state.row.id;
+    const project_name = state.row.project_name;
+    const viewOnlyMode = state.viewOnlyMode;
+
+    const textRef = useRef(null);
+
+    const experiment_id = state.experimentRow.id;
+    const [experimentdata, setExperimentData] = useState(state.experimentRow);
+
+    useLayoutEffect(() => {
+        const adjustFontSize = () => {
+            const element = textRef.current;
+            if (element) {  
+                const parentWidth = element.parentNode.parentNode.parentNode.offsetWidth;
+                let fontSize = 2; // Starting font size in pixels
+                const minFontSize = 0.5; // Minimum font size in pixels
+
+                element.style.fontSize = `${fontSize}vw`;
+                while (element.scrollWidth + 50 > parentWidth && fontSize > minFontSize) {
+                    fontSize -= 0.10;
+                    element.style.fontSize = `${fontSize}vw`;
+                }
+            }
+        };
+        mentored_api.get_experiment_definition(experiment_id, setExperimentData, (d) => {});
+
+        adjustFontSize();
+        window.addEventListener('resize', adjustFontSize);
+
+        return () => {
+            window.removeEventListener('resize', adjustFontSize);
+        };
+    }, [project_name, experimentdata.exp_name]);
 
     let create_col_prototype = (row) => {
+        let data_size_as_mb = (row.experiment_data_size/(Math.pow(1024, 2))).toFixed(2);
         return [
-            <td className='col-md-2 '>{get_sortable_name(row)}</td>,
-            <td className='col-md-2 text-center ' ><ExperimentExecutionMonitor className='table-icons' /></td>,
-            <td className='col-md-2 text-center'><RiCheckboxBlankCircleFill className='table-icons' style={{ color: row.status === -1 ? 'gray' : row.status === 4 ? 'green' : 'yellow' }} /></td>,
-            <td className='col-md-2 text-center'><FiDownload className='table-icons' /></td>,
-            // <td className='col-md-2 text-center'><TiDeleteOutline className='table-icons' /></td>
-            <td className='col-md-2 text-center'><CRUDButton operation='delete'
-                                                  name={get_sortable_name(row)}
-                                                  triggerFunction={() => {
-                                                    mentored_api.delete_experiment_execution(row.id, (d) => {
-                                                      window.location.reload(false);
-                                                    });
-                                                  }}
-            /></td>
+            <td className='col-md-2 text-center'>{get_sortable_name(row)}</td>,
+            !viewOnlyMode && (
+                <td className='col-md-3 text-center' >
+                    {row.progress < 100 &&
+                        <ExperimentExecutionMonitor ee_id={row.id} className='table-icons' />
+                    }
+                </td>
+            ),
+            <td className='col-md-2 text-center'>
+                <ExperimentExecutionStatus row={row}/>
+            </td>,
+            <td className='col-md-3 text-center'>
+                {row.experiment_data_size > 0 && 
+                    <CRUDButton operation='download'
+                        name={get_sortable_name(row)}
+                        suffixText={data_size_as_mb + " MB"}
+                        triggerFunction={() => {
+                            var urlDownload = "/api/experimentexecutions/"+row.id+"/download_data/";
+                            window.open(urlDownload, '_blank');
+                        }}
+                />}
+            </td>,
+            !viewOnlyMode && (
+                <td className='col-md-2 text-center'><CRUDButton operation='delete'
+                                                    name={get_sortable_name(row)}
+                                                    triggerFunction ={() => {
+                                                        mentored_api.delete_experiment_execution(row.id, (d) => {
+                                                        window.location.reload(false);
+                                                        });
+                                                    }}
+                /></td>
+            )
         ]
     }
 
     let create_header_prototype = () => {
         return [
-            <td className='col-md-2 text-label ' ><b>{t('table.execution')}</b></td>,
-            <td className='col-md-2 text-label text-center' ><b>{t('table.monitor')}</b></td>,
+            <td className='col-md-2 text-label text-center' ><b>{t('table.execution')}</b></td>,
+            !viewOnlyMode && (
+                <td className='col-md-3 text-label text-center'><b>{t('table.monitor')}</b></td>
+            ),
             <td className='col-md-2 text-label text-center' ><b>{t('table.status')}</b></td>,
-            <td className='col-md-2 text-label text-center' ><b>{t('table.logs')}</b></td>,
-            <td className='col-md-2 text-label text-center' ><b>{t('table.delete')}</b></td>
+            <td className='col-md-3 text-label text-center' ><b>{t('table.logs')}</b></td>,
+            !viewOnlyMode && (
+                <td className='col-md-2 text-label text-center' ><b>{t('table.delete')}</b></td>
+            )
         ]
     }
+
+    const get_sortable_name_execution = (row) => [t('newexecution.execution') + row.id.toString()];
 
     let get_sortable_name = (row) => {
         return t('newexecution.execution') + row.id.toString();
     }
 
-    // const [exp_exec_list, setExpexec_list] = useState([]);
-    // const [exp_exec_list, setExpexec_list] = useState([{"id":60,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":59,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":58,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":57,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":56,"project":6,"experiment":21,"status":-1,"execution_time":300},{"id":55,"project":6,"experiment":21,"status":-1,"execution_time":300},{"id":54,"project":6,"experiment":21,"status":-1,"execution_time":300},{"id":53,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":52,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":51,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":50,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":49,"project":6,"experiment":21,"status":4,"execution_time":300},{"id":48,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":47,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":46,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":45,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":44,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":43,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":42,"project":6,"experiment":20,"status":4,"execution_time":300},{"id":41,"project":6,"experiment":19,"status":4,"execution_time":300},{"id":40,"project":6,"experiment":19,"status":4,"execution_time":300},{"id":39,"project":6,"experiment":19,"status":4,"execution_time":300},{"id":38,"project":6,"experiment":19,"status":4,"execution_time":300},{"id":37,"project":6,"experiment":18,"status":-1,"execution_time":300},{"id":36,"project":6,"experiment":17,"status":-1,"execution_time":300},{"id":35,"project":6,"experiment":16,"status":4,"execution_time":300},{"id":34,"project":6,"experiment":15,"status":4,"execution_time":300},{"id":33,"project":6,"experiment":14,"status":4,"execution_time":300},{"id":32,"project":6,"experiment":14,"status":4,"execution_time":300},{"id":31,"project":6,"experiment":13,"status":4,"execution_time":300},{"id":30,"project":6,"experiment":13,"status":4,"execution_time":300},{"id":29,"project":6,"experiment":13,"status":4,"execution_time":300},{"id":28,"project":6,"experiment":12,"status":4,"execution_time":300},{"id":27,"project":6,"experiment":12,"status":4,"execution_time":300},{"id":26,"project":6,"experiment":12,"status":4,"execution_time":300},{"id":25,"project":6,"experiment":12,"status":4,"execution_time":300},{"id":24,"project":6,"experiment":12,"status":4,"execution_time":300},{"id":23,"project":6,"experiment":11,"status":4,"execution_time":300},{"id":22,"project":6,"experiment":4,"status":-1,"execution_time":300},{"id":21,"project":6,"experiment":10,"status":4,"execution_time":300},{"id":20,"project":1,"experiment":10,"status":-1,"execution_time":300},{"id":19,"project":6,"experiment":9,"status":-1,"execution_time":300},{"id":18,"project":6,"experiment":4,"status":-1,"execution_time":300},{"id":17,"project":1,"experiment":9,"status":-1,"execution_time":300},{"id":16,"project":1,"experiment":4,"status":-1,"execution_time":300},{"id":15,"project":1,"experiment":9,"status":-1,"execution_time":300},{"id":14,"project":1,"experiment":9,"status":-1,"execution_time":300},{"id":13,"project":1,"experiment":9,"status":-1,"execution_time":300},{"id":11,"project":2,"experiment":4,"status":-1,"execution_time":300},{"id":9,"project":1,"experiment":4,"status":4,"execution_time":300},{"id":10,"project":1,"experiment":4,"status":4,"execution_time":300},{"id":8,"project":1,"experiment":4,"status":4,"execution_time":300}]);
 
-    let get_dataTable = (setState, cb) => {
-
-        if (DEV) {
-            let d = [{ "id": 60, "project": 6, "experiment": 21, "status": 0, "execution_time": 300 }, { "id": 59, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 58, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 57, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 56, "project": 6, "experiment": 21, "status": -1, "execution_time": 300 }, { "id": 55, "project": 6, "experiment": 21, "status": -1, "execution_time": 300 }, { "id": 54, "project": 6, "experiment": 21, "status": -1, "execution_time": 300 }, { "id": 53, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 52, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 51, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 50, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 49, "project": 6, "experiment": 21, "status": 4, "execution_time": 300 }, { "id": 48, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 47, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 46, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 45, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 44, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 43, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 42, "project": 6, "experiment": 20, "status": 4, "execution_time": 300 }, { "id": 41, "project": 6, "experiment": 19, "status": 4, "execution_time": 300 }, { "id": 40, "project": 6, "experiment": 19, "status": 4, "execution_time": 300 }, { "id": 39, "project": 6, "experiment": 19, "status": 4, "execution_time": 300 }, { "id": 38, "project": 6, "experiment": 19, "status": 4, "execution_time": 300 }, { "id": 37, "project": 6, "experiment": 18, "status": -1, "execution_time": 300 }, { "id": 36, "project": 6, "experiment": 17, "status": -1, "execution_time": 300 }, { "id": 35, "project": 6, "experiment": 16, "status": 4, "execution_time": 300 }, { "id": 34, "project": 6, "experiment": 15, "status": 4, "execution_time": 300 }, { "id": 33, "project": 6, "experiment": 14, "status": 4, "execution_time": 300 }, { "id": 32, "project": 6, "experiment": 14, "status": 4, "execution_time": 300 }, { "id": 31, "project": 6, "experiment": 13, "status": 4, "execution_time": 300 }, { "id": 30, "project": 6, "experiment": 13, "status": 4, "execution_time": 300 }, { "id": 29, "project": 6, "experiment": 13, "status": 4, "execution_time": 300 }, { "id": 28, "project": 6, "experiment": 12, "status": 4, "execution_time": 300 }, { "id": 27, "project": 6, "experiment": 12, "status": 4, "execution_time": 300 }, { "id": 26, "project": 6, "experiment": 12, "status": 4, "execution_time": 300 }, { "id": 25, "project": 6, "experiment": 12, "status": 4, "execution_time": 300 }, { "id": 24, "project": 6, "experiment": 12, "status": 4, "execution_time": 300 }, { "id": 23, "project": 6, "experiment": 11, "status": 4, "execution_time": 300 }, { "id": 22, "project": 6, "experiment": 4, "status": -1, "execution_time": 300 }, { "id": 21, "project": 6, "experiment": 10, "status": 4, "execution_time": 300 }, { "id": 20, "project": 1, "experiment": 10, "status": -1, "execution_time": 300 }, { "id": 19, "project": 6, "experiment": 9, "status": -1, "execution_time": 300 }, { "id": 18, "project": 6, "experiment": 4, "status": -1, "execution_time": 300 }, { "id": 17, "project": 1, "experiment": 9, "status": -1, "execution_time": 300 }, { "id": 16, "project": 1, "experiment": 4, "status": -1, "execution_time": 300 }, { "id": 15, "project": 1, "experiment": 9, "status": -1, "execution_time": 300 }, { "id": 14, "project": 1, "experiment": 9, "status": -1, "execution_time": 300 }, { "id": 13, "project": 1, "experiment": 9, "status": -1, "execution_time": 300 }, { "id": 11, "project": 2, "experiment": 4, "status": -1, "execution_time": 300 }, { "id": 9, "project": 1, "experiment": 4, "status": 4, "execution_time": 300 }, { "id": 10, "project": 1, "experiment": 4, "status": 4, "execution_time": 300 }, { "id": 8, "project": 1, "experiment": 4, "status": 4, "execution_time": 300 }];
-            setState(d);
-            cb(d);
+    const generateData = (num) => {
+        const data = [];
+        for (let i = 0; i < num; i++) {
+          data.push({
+            id: i + 1,
+          });
         }
-        else {
-            mentored_api.get_experiments_executions(setState, (d) => { cb(d) });
-        }
-    }
+        return data;
+      };
 
-    // useEffect(() => {
-    //     mentored_api.get_experiments_executions(setExpexec_list, (d) => {});
-    //   }, []);
+    const get_dataTable = (setState, cb) => {
+        mentored_api.get_experiment_executions(experiment_id, setState, (d) => { cb(d) });
+    };
 
     return (
         <Dashboard >
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className='title top-5 col-md-10 h-10vh'>
-                        <h1 className='top-2.5vh'>{projectTitle}</h1>
+            <div className='container-fluid top-5'>
+                <div className='row col-md-12 justify-content-between'>
+                <Link to='/experiments/' state={{ row: state.row, viewOnlyMode: viewOnlyMode }} className="left-7 title-option title top-5 col-md-8 h-10vh text-decoration-none">
+                    <div className='d-flex justify-content-between align-items-center text-decoration-none title'>
+                        <h1 className='top-2.5vh d-flex align-items-center'>
+                            <span ref={textRef} className="text-dynamic">
+                                {project_name} <MdOutlineKeyboardArrowRight /> {experimentdata.exp_name}
+                            </span>
+                        </h1>
+                        <h1 className='top-2.5vh'>
+                            <GiReturnArrow />
+                        </h1>
                     </div>
-                    <div className='col-md-2'>
-                        <PopUp />
-                    </div>
+                </Link>
+                <div className='right-1 col-md-1 top-5 h-10vh button-text text-center'>
+                    <ExperimentDefinitionYAMLView
+                    exp={experimentdata}
+                    viewOnlyMode={viewOnlyMode}
+                    onSaveCallback={(edited_yaml) => {
+                        mentored_api.get_experiment_definition(experiment_id, setExperimentData, (d) => {});
+                    }}
+                    iconAsTitle={true}/>
                 </div>
-                <div className='row top-10'>
-                    <div className="table-size col-md-12" style={{ overflowY: 'auto', overflowX: 'hidden' }}>
-                        <SortableTable get_sortable_name={get_sortable_name} get_dataTable={get_dataTable} tableTitle={t('table.execute')} create_col_prototype={create_col_prototype} create_header_prototype={create_header_prototype} />
+
+                {!viewOnlyMode &&
+                    <div className='right-1 col-md-2'>
+                        <PopUp projectId={project_id} experimentId={experiment_id}/>
+                    </div>
+                }
+                </div>
+                <div className='row col-md-12 top-10'>
+                    <div className="table-size col-md-12">
+                        <SortableTable 
+                        get_sortable_name={get_sortable_name_execution} 
+                        get_dataTable={(setState, cb) => get_dataTable(setState, (data) => cb(data))} 
+                        tableTitle={t('table.execute')}
+                        reloadTime={5000}
+                        create_col_prototype={create_col_prototype} 
+                        create_header_prototype={create_header_prototype} 
+                        maxHeight={'540px'}
+                        sortByName={true}
+                        />
                     </div>
                 </div>
             </div>

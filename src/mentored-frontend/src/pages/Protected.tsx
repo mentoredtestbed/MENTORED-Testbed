@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import useAxios from "../utils/useAxios";
-import AuthContext, { AuthProvider } from "../context/AuthContext";
+import { useEffect, useState } from 'react';
 
+import AuthContext, { AuthProvider } from '../context/AuthContext';
+import useAxios from '../utils/useAxios';
 
-const ProtectedPage = () => {
+function ProtectedPage() {
   return (
     <AuthProvider>
       <ProtectedPageCore />
     </AuthProvider>
   );
-};
+}
 export default ProtectedPage;
 
 interface ExperimentExecution {
-  id: number,
-  project: number,
-  experiment: number,
-  status: number,
-  execution_time: number,
+  id: number;
+  project: number;
+  experiment: number;
+  status: number;
+  execution_time: number;
 }
 
 interface ExperimentExecutionProps {
@@ -37,7 +37,7 @@ export function ProtectedPageCore() {
       // } catch {
       //   setRes("Something went wrong");
       // }
-      const response = await api.get("/experimentexecutions/");
+      const response = await api.get('/experimentexecutions/');
       // setRes(response.data.response);
       setRes(JSON.stringify(response.data));
     };

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +27,10 @@ SECRET_KEY = 'django-insecure-tu^(b(zqc@4=w6_@-%4guz_3!$pd!$u24acftyn7v(*aa!@96w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DOMAIN = os.getenv('DOMAIN', 'localhost')
+
 ALLOWED_HOSTS = [
-    'mentored-testbed.cafeexpresso.rnp.br'
+    DOMAIN
 ]
 
 

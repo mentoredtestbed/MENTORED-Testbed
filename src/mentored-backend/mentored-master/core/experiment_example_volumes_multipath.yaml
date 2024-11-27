@@ -1,0 +1,26 @@
+Experiment:
+  name: example_persistent_volume_multipath
+  nodeactors:
+    - name: 'nodeactor'
+      persitent_volume_path: ["/usr/bin/ls", "/var"]
+      replicas: 1
+      containers:
+        - name: 'container1'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          command: ["/entry.sh"]
+          args: ["env"]
+        - name: 'container2'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          command: ["/entry.sh"]
+          args: ["env"]
+      region: 'ids-go'
+    - name: 'nodeactor-2'
+      # persitent_volume_path: "/MENTORED_IP_LIST.yaml"
+      replicas: 1
+      containers:
+        - name: 'container1'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          command: ["/entry.sh"]
+          args: ["env"]
+      region: 'ids-go'
+  topology: None

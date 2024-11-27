@@ -1,3 +1,4 @@
+import presetAttributify from '@unocss/preset-attributify';
 import {
   defineConfig,
   // presetAttributify,
@@ -8,15 +9,18 @@ import {
   presetWind,
   transformerDirectives,
   transformerVariantGroup,
-
-} from 'unocss'
-import presetAttributify from '@unocss/preset-attributify'
-
+} from 'unocss';
 
 export default defineConfig({
   shortcuts: [
-    ['btn', 'px-10 py-2 rounded inline-block bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50 outline-none border-0 focus:outline-none'],
-    ['icon-btn', 'text-[0.9em] inline-block cursor-pointer select-none opacity-75 bg-transparent transition duration-200 text-white ease-in-out hover:opacity-100 hover:text-indigo-600'],
+    [
+      'btn',
+      'px-10 py-2 rounded inline-block bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50 outline-none border-0 focus:outline-none',
+    ],
+    [
+      'icon-btn',
+      'text-[0.9em] inline-block cursor-pointer select-none opacity-75 bg-transparent transition duration-200 text-white ease-in-out hover:opacity-100 hover:text-indigo-600',
+    ],
   ],
   presets: [
     // presetUno(),
@@ -39,7 +43,7 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      'primary': {
+      primary: {
         50: '#ABC2FF',
         100: '#96B3FF',
         200: '#6D95FF',
@@ -61,7 +65,7 @@ export default defineConfig({
         '600': '#D4215C',
         '700': '#A4194B',
         '800': '#731239',
-        '900': '#420A28'
+        '900': '#420A28',
 
         // 50: '#f2f6f9',
         // 100: '#d5daec',
@@ -70,12 +74,8 @@ export default defineConfig({
         // 400: '#072536',
         // 500: '#051A1E',
       },
-
     },
   },
-  transformers: [
-    transformerDirectives(),
-    transformerVariantGroup(),
-  ],
+  transformers: [transformerDirectives(), transformerVariantGroup()],
   safelist: [...'prose  w-max prose-lg border-2 border animate-spin'.split(' ')],
-})
+});

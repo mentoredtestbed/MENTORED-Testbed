@@ -2,7 +2,7 @@ Experiment:
   name: exemplo_mentored_simples
   nodeactors:
     - name: 'nodeactor-name-1'
-      region: 'ids-sc'
+      region: 'ids-go'
       replicas: 3
       containers:
         - name: 'arm-slowlories-1'
@@ -22,6 +22,6 @@ Experiment:
         - name: 'arm-slowlories-3'
           image: ghcr.io/brunomeyer/generic-botnet:latest
           command: ["sleep", "INF"]
-      region: 'ids-pe'
+      region: 'ids-go'
   topology: None
   default_persitent_volume_path: "/MENTORED_IP_LIST.yaml"

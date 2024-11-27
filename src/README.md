@@ -44,10 +44,14 @@ nano .env // edit the .env file here
 Your `.env` file should look like this
 ```
 VITE_API_BASE_URL=https://portal.mentored.ccsc-research.org
-VITE_WEBKUBECTL_URL=https://portal.mentored.ccsc-research.org:8080
+VITE_WEBKUBECTL_URL=https://portal.mentored.ccsc-research.org/webkubectl/
+RELEASE_MODE=development
+DEFAULT_KUBECONFIG_PATH=/root/.kube-minikube/config
 ```
 - `API_BASE_URL`: Url hosting the REST api in `/api`, tutorial in `/tutorial/` and the frontend in `/`
 - `VITE_WEBKUBECTL_URL`: Url hosting a Webkubectl server
+- `RELEASE_MODE`: development or production
+- `DEFAULT_KUBECONFIG_PATH`: Path to the kubeconfig file. Use `/root/.kube/config` or another if you have your own cluster. By default it tries to use the minikube config from DEV mode.
 
 #### SP DJANGO Certificates
 

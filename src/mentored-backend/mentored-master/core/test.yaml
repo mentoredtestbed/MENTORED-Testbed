@@ -1,0 +1,17 @@
+Experiment:
+  name: exemplo_mentored_simples
+  nodeactors:
+    - name: 'nodeactor-name-1'
+      region: 'whx-es'
+      replicas: 2
+      containers:
+        - name: 'arm-slowlories-1'
+          image: arm64v8/ubuntu:latest
+          command: ["sleep", "INF"]
+    - name: 'nodeactor-name-2'
+      replicas: 2
+      containers:
+        - name: 'arm-slowlories-2'
+          image: arm64v8/ubuntu:latest
+          command: ["sleep", "INF"]
+      region: 'ids-mg'

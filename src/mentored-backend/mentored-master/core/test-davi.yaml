@@ -1,0 +1,98 @@
+Experiment:
+  name: hping_experiment
+  nodeactors:
+    - name: 'generic-client'
+      persitent_volume_path: "/client_delay.csv"
+      replicas: 3
+      containers:
+        - name: 'client'
+          image: ghcr.io/brunomeyer/generic-client:latest
+          imagePullPolicy: "Always"
+          command: ["/entry.sh"]
+          args: ['python3', 'client_web_metrics.py', "1", "10"]
+          env:
+            - name: TIMEOUT_CMD
+              value: "300"
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              memory: "64M"
+              cpu: "0.5"
+            limits:
+              memory: "128M"
+              cpu: "1"
+      region: 'ids-go'
+
+    - name: 'generic-botnet'
+      replicas: 2
+      containers:
+        - name: 'botnet'
+          image: ghcr.io/brunomeyer/generic-botnet:latest
+          # imagePullPolicy: "Always"
+          command: ["/entry.sh"]
+          args: ["hping3", "-S", "--faster", "-p", "80"]
+          env:
+            - name: PROTOCOL
+              value: "ICMP"
+            - name: TIMEOUT_CMD
+              value: "180"
+            - name: TIME_WAIT_START
+              value: "60"
+            - name: NET_INTERFACE
+              value: net1
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              memory: "64M"
+              cpu: "0.5"
+            limits:
+              memory: "128M"
+              cpu: "1"
+      region: 'ids-pb'
+      
+    - name: 'na-server'
+      persitent_volume_path: "/app/server_throughput.csv"
+      replicas: 1
+      containers:
+        - name: tcpdump
+          image: ghcr.io/brunomeyer/nginx-server
+          # imagePullPolicy: "Always"
+          # imagePullPolicy: "IfNotPresent"
+          command: ["/app/entry.sh"]
+          args: ["python3", "save_throughput.py"]
+          securityContext:
+            privileged: true
+          env:
+            - name: TIMEOUT_CMD
+              value: "300"
+        - name: 'server'
+          image: ghcr.io/brunomeyer/generic-apache-flask-webserver:latest
+          imagePullPolicy: "Always"
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "1G"
+              cpu: "1"
+            limits:
+              memory: "2G"
+              cpu: "2"
+        - name: tshark
+          image: ddgemmer/mentored:tshark
+          # imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
+          command: ["/app/entry.sh"]
+          args: ["tshark -i net1 -x -w packets.pcap"]
+          securityContext:
+            privileged: true
+          env:
+            - name: TIMEOUT_CMD
+              value: "300"
+
+      region: 'ids-pe'
+
+  topology: None

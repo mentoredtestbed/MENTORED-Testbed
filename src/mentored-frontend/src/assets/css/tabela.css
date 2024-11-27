@@ -1,48 +1,160 @@
 th,
 td {
-    height: 3rem;
+  height: 3rem;
+}
+
+.table-container {
+  /* Set the maximum height of the container */
+  overflow-y: auto;
+  /* Enable vertical scrolling for overflow */
+  position: relative;
+  border-radius: 0vw 0vw 1vw 1vw;
+}
+
+.header-table-fixed {
+  position: sticky;
+  background: #FDFDFD;
+  top: 0;
+  z-index: 1;
+  /* Ensure the header appears above the body */
+}
+
+.header-table-fixed table,
+.body-table table {
+  border-collapse: collapse;
+  /* Collapse table borders */
+  width: 100%;
+  /* Ensure the table fills its container */
+}
+
+.body-table table tbody tr:nth-child(odd) {
+  /* background color opacity 5% (0C) */
+  background: #1035590C;
+}
+
+.body-table table tbody tr:nth-child(even) {
+}
+
+.body-table table tbody tr{
+  /* border opacity 5% (0C) */
+  border-bottom: 1px solid #1035590C;
+}
+
+.body-table {
+  background: #FDFDFD;
+  border-radius: 0vw 0vw 1vw 1vw;
+  min-height: 250px;
 }
 
 .header-table {
-    background: #103559;
-    border-radius: 1vw 1vw 0vw 0vw;
+  background: #103559;
+  border-radius: 1vw 1vw 0vw 0vw;
 }
 
 .title-table {
-    font-weight: 700;
-    font-size: 2vw;
-    text-transform: capitalize;
-
-    color: #FDFDFD;
+  font-weight: 700;
+  font-size: 2vw;
+  text-transform: capitalize;
+  color: #FDFDFD;
 }
 
 .search {
-    font-style: italic;
-    font-size: 1vw;
+  font-style: italic;
+  font-size: 1vw;
 }
 
 .search-iconeStyle {
-    height: auto;
-    width: 2vw;
-    color: #FDFDFD;
+  height: auto;
+  width: 2vw;
+  color: #FDFDFD;
 }
 
 .text-label {
-    font-size: 1.4vw;
+  font-size: calc(1em + 0.5vw);
 }
 
 .table-icons {
-    height: auto;
-    width: 1.5vw;
-    cursor: pointer;
+  height: auto;
+  width: 1.5vw;
+  cursor: pointer;
+}
+
+.title-edit-icon {
+  width: auto;
+  cursor: pointer;
+  padding: 2vh;
+  height: 9vh;
+  border-radius: 2vh;
+  background-color: #103559;
+}
+
+.title-edit-icon:hover {
+  color: #FDFDFD;
+  opacity: 0.8;
 }
 
 .experiment-name {
-    font-weight: 700;
-    font-size: 1vw;
+  font-weight: 700;
+  font-size: 1vw;
 }
 
-.table-background {
-    background: #F0FAFF;
-    border-radius: 0vw 0vw 1vw 1vw;
+::-webkit-scrollbar {
+  width: 10px;
+  /* Adjust the width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #103559;
+  /* Change the color of the scrollbar thumb */
+}
+
+.formRequestList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.TextField .MuiInputBase-root {
+  flex: 1;
+}
+
+.formRequestListTitle {
+  font-size: 2vh;
+  font-weight: 500;
+  color: black;
+  align-self: flex-end;
+  margin-bottom: 5px !important; 
+
+}
+
+.buttonPersonalization {
+  border-radius: 20px !important;
+  background-color: #103559 !important;
+  color: white !important;
+  margin: auto !important;
+}
+
+.buttonPersonalization:disabled {
+  background-color: grey !important;
+}
+
+.buttonPersonalizationRequest {
+  border-radius: 20px !important;
+  background-color: #103559;
+  color: white !important;
+  margin: auto !important;
+}
+
+.buttonPersonalizationRequest:disabled {
+  background-color: grey;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.custom-flex {
+  justify-content: center;
+  align-items: center;
 }

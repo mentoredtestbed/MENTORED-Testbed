@@ -1,15 +1,23 @@
 version: '3'
 services:
+  webkubectl:
+    image: ghcr.io/mentoredtestbed/webkubectl:latest
+    environment:
+      - GOTTY_OPTIONS=--permit-arguments --port 8080 --permit-write
+    privileged: true
+    ports:
+      - "8081:8080"
+
   frontend-build:
     build:
       context: .
       dockerfile: Dockerfile.frontend-build
     network_mode: "host"
     command: /app/frontend-build-entrypoint.sh
-    # command: sleep INF
     volumes:
       - ./build-prod:/build
       - .env:/app/.env.production
+
   tutorial-build:
     build:
       context: .
@@ -19,25 +27,13 @@ services:
     volumes:
       - ./build-tutorial-prod:/build-tutorial
 
-  # mentored-backend:
-  #   build:
-  #     context: .
-  #     dockerfile: mentored-backend/Dockerfile
-  #   # network_mode: "host"
-  #   command: /app/init.sh
-  #   ports:
-  #     - "3031:3031"
-  #   # volumes:
-  #   #   - ./build:/build
-
   mentored-backend:
     build:
       context: .
       dockerfile: mentored-backend/Dockerfile
-    # command: /app/init.sh
-    # command: uwsgi --socket 0.0.0.0:3031 --wsgi-file sp_django/wsgi.py --buffer-size=32768
-    command: uwsgi --socket 0.0.0.0:3031 --master --buffer-size=32768 --wsgi-file sp_django/wsgi.py --chmod-socket=666 --enable-threads --processes 2 --lazy-apps
-    # command: sleep INF
+    restart: always
+    command: uwsgi --socket 0.0.0.0:3031 --master --buffer-size=65535 --wsgi-file sp_django/wsgi.py --chmod-socket=666 --enable-threads --processes 2 --lazy-apps -t 600 --post-buffering 2097152 --post-buffering-bufsize 2097152 --ini uwsgi_config.ini
+
     ports:
       - "3031:3031"
     volumes:
@@ -45,15 +41,15 @@ services:
       - ./certificates:/app/certificates/
       - ./mentored-backend:/app/
       - ./kubeconfig:/root/.kube/config
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
 
   nginx-server:
     build:
       context: .
       dockerfile: Dockerfile.nginx-server-prod
-    # ports:
-    #  - "80:80"
-    #  - "443:443"
-    #  - "8080:8080"
     network_mode: "host"
     volumes:
       - ./build-prod/dist:/usr/share/nginx/html

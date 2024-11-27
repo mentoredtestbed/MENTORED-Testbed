@@ -3,6 +3,7 @@ export default{
     "name": "Experiments Name",
     "visualize": "Visualize",
     "edit": "Edit",
+    "edit_view": "Edit/View",
     "delete": "Delete",
     "newdefinition": "New Definition",
     "searchplaceholder": "Type something here!",

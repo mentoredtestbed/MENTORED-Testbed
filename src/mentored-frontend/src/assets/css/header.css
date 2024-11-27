@@ -14,7 +14,10 @@
     font-style: normal;
     font-size: 1vw;
     color: #FDFDFD;
+}
 
+.username-lock {
+    user-select: none;
 }
 
 .logout-iconeStyle,

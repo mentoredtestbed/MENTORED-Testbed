@@ -1,0 +1,26 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.popup-new-member {
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    background-color: #103559;
+    padding: 1vw;
+    border-radius: 1vw;
+    height: 22%;
+    width: 30%;
+    position: fixed;
+    border: #FFFFFF 0.7vh solid;
+}
+
+.background-rectangle-new-member {
+    background: #F0FAFF !important;
+}

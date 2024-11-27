@@ -1,0 +1,5 @@
+.tooltip-inner {
+    max-width: 500px !important;
+    border-radius: 10px;
+    background-color: #103559 !important;
+}

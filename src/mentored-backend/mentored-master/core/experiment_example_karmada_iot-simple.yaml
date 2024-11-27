@@ -1,0 +1,71 @@
+Experiment:
+  name: "infection-scenario"
+  nodeactors:
+    - name: "na-server"
+      persitent_volume_path: ["/app/results/", "/app/results/"]
+      replicas: 1
+      containers:
+        - name: "tshark"
+          image: "ghcr.io/khalilsantana/network-monitor:infection-scenario-iot-v1-ram-dbg"
+          imagePullPolicy: "Always"
+          command: ["iptables-80-22-tshark.sh"]
+          securityContext:
+            privileged: true
+          env:
+            - name: "TIMEOUT_CMD"
+              value: "1000"
+        - name: "server"
+          image: "ghcr.io/khalilsantana/nginx-simple:infection-scenario-iot-v1-ram-dbg"
+          imagePullPolicy: "Always"
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 80
+          env:
+            - name: "ENABLE_SLOWLORIS_DEFENSE"
+              value: "true"
+          resources:
+            requests:
+              memory: "1G"
+              cpu: "1"
+            limits:
+              memory: "2G"
+              cpu: "2"
+      region: "rpi-1-ufmg"
+      cluster: "iot"
+
+    - name: "generic-client-static-rpi-6"
+      persitent_volume_path: "/app/results/"
+      replicas: 5
+      containers:
+        - name: "client-static"
+          image: "ghcr.io/khalilsantana/generic-client:infection-scenario-iot-v1-ram-dbg"
+          imagePullPolicy: "Always"
+          command: ["/entry.sh"]
+          args: ["random-requests.sh"]
+          env:
+            - name: "TIME_WAIT_START"
+              value: "0"
+            - name: "TIMEOUT_CMD"
+              value: "1000"
+            - name: "ADD_SERVER_IP_TO_COMMAND"
+              value: "true"
+            - name: "MIN_RANDOM"
+              value: "1.0"
+            - name: "MAX_RANDOM"
+              value: "1.0"
+            - name: "ADDITIONAL_FLAGS"
+              value: "--static_behavior"
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128M"
+              cpu: "200m"
+      region: "rpi-6-ufmg"
+      cluster: "x86"
+
+  topology: "None"

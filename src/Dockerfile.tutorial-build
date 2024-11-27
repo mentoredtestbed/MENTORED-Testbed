@@ -8,6 +8,6 @@ WORKDIR /app/
 # Copy the rest of the application code
 COPY Testbed-Tutorial .
 
-RUN pip install mkdocs mkdocs-material mkdocs-static-i18n==0.56
+RUN pip install mkdocs==1.6.0 mkdocs-material==9.5.21 mkdocs-static-i18n==1.2.3
 
 COPY tutorial-build-entrypoint.sh .

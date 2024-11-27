@@ -1,0 +1,119 @@
+Experiment:
+  schema:
+    default_persitent_volume_path:
+      anyof_schema:
+        - type: string
+          minlength: 1
+        - type: list
+          schema:
+            type: string
+            minlength: 1
+      required: false
+    name:
+      type: string
+      required: true
+    topology:
+      required: false
+      type: string
+      allowed: ['None']
+    nodeactors:
+      schema:
+        schema:
+          containers:
+            schema:
+              schema:
+                args:
+                  required: false
+                  schema:
+                    type: string
+                  type: list
+                command:
+                  required: false
+                  schema:
+                    type: string
+                  type: list
+                env:
+                  schema:
+                    schema:
+                      name:
+                        type: string
+                      value:
+                        type: string
+                    type: dict
+                  type: list
+                image:
+                  type: string
+                  required: true
+                imagePullPolicy:
+                  allowed:
+                  - Always
+                  - IfNotPresent
+                  type: string
+                name:
+                  type: string
+                ports:
+                  required: false
+                  schema:
+                    schema:
+                      containerPort:
+                        type: integer
+                    type: dict
+                  type: list
+                resources:
+                  required: false
+                  schema:
+                    limits:
+                      schema:
+                        cpu:
+                          type: string
+                        memory:
+                          type: string
+                      type: dict
+                    requests:
+                      schema:
+                        cpu:
+                          type: string
+                        memory:
+                          type: string
+                      type: dict
+                  type: dict
+                securityContext:
+                  required: false
+                  schema:
+                    privileged:
+                      type: boolean
+                  type: dict
+              type: dict
+            type: list
+          name:
+            type: string
+            required: true
+            minlength: 1
+            maxlength: 32
+          persitent_volume_path:
+            anyof_schema:
+              - type: string
+                minlength: 1
+              - type: list
+                schema:
+                  type: string
+                  minlength: 1
+            required: false
+          region:
+            type: string
+            required: true
+            minlength: 1
+          cluster:
+            type: string
+            required: true
+            minlength: 1
+          replicas:
+            type: integer
+            required: true
+            min: 1
+        type: dict
+      type: list
+      minlength: 1
+      required: true
+  type: dict
+  required: true
